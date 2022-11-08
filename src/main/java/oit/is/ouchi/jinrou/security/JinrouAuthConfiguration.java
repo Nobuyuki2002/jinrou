@@ -71,6 +71,8 @@ public class JinrouAuthConfiguration {
     http.authorizeHttpRequests()
         .mvcMatchers("/jinrou").authenticated();
     http.logout().logoutSuccessUrl("/");
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
     return http.build();
   }
 
