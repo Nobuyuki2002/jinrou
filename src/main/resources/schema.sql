@@ -3,7 +3,8 @@ CREATE TABLE users (
     room INT NOT NULL,
     pname VARCHAR NOT NULL,
     roles INT NOT NULL,
-    isdeath boolean
+    isdeath boolean,
+    vote INT
 );
 
 CREATE TABLE rolles (
