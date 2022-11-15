@@ -1,7 +1,7 @@
 CREATE TABLE users (
     id IDENTITY,
     room INT NOT NULL,
-    pname VARCHAR NOT NULL,
+    pname VARCHAR ,
     roles INT NOT NULL,
     isdeath boolean,
     vote INT
