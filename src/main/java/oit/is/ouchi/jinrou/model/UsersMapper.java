@@ -11,16 +11,25 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface UsersMapper {
 
-  @Insert("INSERT INTO users (lname,pname,room,roles,isdeath) VALUES (#{lname},#{pname},#{room},#{roles},#{vote});")
+  @Insert("INSERT INTO users (lname,pname,room,roles,isDeath,vote) VALUES (#{lname},#{pname},#{room},#{roles},#{isDeath},#{vote});")
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
   void insertUsers(Users user);
 
   @Select("select * from users where lname = #{lname}")
   Users selectByName(String lname);
 
-  @Select("SELECT COUNT(room) as count FROM users WHERE room = #{room_id}")
-  Count selectCountByRoomId(int room_id);
+  @Select("SELECT COUNT(room) as count FROM users WHERE room = #{roomId}")
+  Count selectCountByRoomId(int roomId);
 
   @Select("SELECT * FROM users;")
   ArrayList<Users> selectAll();
+
+  @Select("SELECT * FROM users WHERE room = #{roomId};")
+  ArrayList<Users> selectByRoomId(int roomId);
+
+  @Update("UPDATE users set  roles = #{roles} WHERE id = #{id}")
+  void updateRole(Users user);
+
+  @Update("UPDATE users set vote = #{vote} WHERE id = #{id}}")
+  void updateVote(Users user);
 }

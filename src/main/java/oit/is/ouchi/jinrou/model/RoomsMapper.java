@@ -20,4 +20,7 @@ public interface RoomsMapper {
   @Select("select * from rooms where roomId = #{roomId};")
   Rooms selectById(int roomId);
 
+  @Update("UPDATE rooms set wolfNum = #{wolfNum} WHERE roomId = #{roomId}")
+  void updateWolfNum(Rooms room);
+
 }

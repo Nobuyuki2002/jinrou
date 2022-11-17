@@ -6,6 +6,7 @@ public class Rooms {
   String roomName;
   int roomPass;
   int roopCount;
+  int wolfNum;
   int winner; // 1 : 村人陣営 2 : 人狼陣営 0 : 勝者未定
   boolean isActive;
 
@@ -17,8 +18,17 @@ public class Rooms {
     this.roomName = roomName;
     this.roomPass = roomPass;
     this.roopCount = 0;
+    this.wolfNum = 0;
     this.winner = 0;
     this.isActive = true;
+  }
+
+  public int getWolfNum() {
+    return wolfNum;
+  }
+
+  public void setWolfNum(int wolfNum) {
+    this.wolfNum = wolfNum;
   }
 
   public int getSettingId() {

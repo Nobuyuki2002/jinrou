@@ -4,7 +4,7 @@ CREATE TABLE users (
     pname VARCHAR,
     room INT NOT NULL,
     roles INT NOT NULL,
-    isdeath BOOLEAN,
+    isDeath BOOLEAN,
     vote INT
 );
 
@@ -20,6 +20,7 @@ CREATE TABLE rooms (
     roomName VARCHAR NOT NULL,
     roomPass INT NOT NULL,
     roopCount INT NOT NULL,
+    wolfNum INT,
     winner INT NOT NULL,
     isActive BOOLEAN
 );

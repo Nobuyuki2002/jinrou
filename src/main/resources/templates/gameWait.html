@@ -14,7 +14,6 @@
           var resultData = JSON.parse(event.data);
           var result = "";
           resultData.forEach(data => {
-            result += "a:" + data.roomId + "<br>";
             result += "<div th:if=\"${roomId}\"==" + data.roomId + ">";
             result += "<a href =\" /jinrou/match?roomId=" + data.roomId + "\">役割を確認して初夜へ(" + data.roomName + ")</a>";
             result += "</div>";
