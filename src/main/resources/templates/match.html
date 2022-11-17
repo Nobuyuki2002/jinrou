@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>チームおおうち|Jinrou</title>
+</head>
+
+<body>
+  <div th:if="${roomName}">ようこそ、[[${roomName}]]へ</div>
+  <div th:if="${roles}">
+    <h1>あなたの役割は"[[${roles}]]"</h1>
+  </div>
+</body>
+
+</html>

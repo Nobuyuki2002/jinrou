@@ -1,24 +1,30 @@
 CREATE TABLE users (
     id IDENTITY,
-    room INT NOT NULL,
+    lname VARCHAR NOT NULL,
     pname VARCHAR,
+    room INT NOT NULL,
     roles INT NOT NULL,
-    isdeath boolean,
+    isdeath BOOLEAN,
     vote INT
 );
 
-CREATE TABLE rolles (
-    roll_id IDENTITY,
-    roll_name VARCHAR NOT NULL,
-    isVillager boolean
+CREATE TABLE roles (
+    rolId IDENTITY,
+    rolName VARCHAR NOT NULL,
+    isVillager INT NOT NULL
 );
 
-CREATE TABLE room (
-    room_id IDENTITY,
-    settng_id INT NOT NULL,
-    room_name VARCHAR NOT NULL,
-    room_pass INT NOT NULL,
-    roop_count INT NOT NULL,
-    winner boolean,
-    isActive boolean
+CREATE TABLE rooms (
+    roomId IDENTITY,
+    settingId INT NOT NULL,
+    roomName VARCHAR NOT NULL,
+    roomPass INT NOT NULL,
+    roopCount INT NOT NULL,
+    winner INT NOT NULL,
+    isActive BOOLEAN
+);
+
+CREATE TABLE settings (
+    settingId IDENTITY,
+    startCount INT NOT NULL
 );

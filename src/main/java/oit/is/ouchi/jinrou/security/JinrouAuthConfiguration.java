@@ -1,5 +1,8 @@
 package oit.is.ouchi.jinrou.security;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,8 +14,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import oit.is.ouchi.jinrou.model.Roles;
+import oit.is.ouchi.jinrou.model.RolesMapper;
+import oit.is.ouchi.jinrou.model.Users;
+import oit.is.ouchi.jinrou.model.UsersMapper;
+
 @EnableWebSecurity
 public class JinrouAuthConfiguration {
+
+  @Autowired
+  UsersMapper usersMapper;
+
+  @Autowired
+  RolesMapper rolesMapper;
 
   /**
    * 認証処理に関する設定（誰がどのようなロールでログインできるか）
@@ -23,6 +37,15 @@ public class JinrouAuthConfiguration {
   public InMemoryUserDetailsManager userDetailsService() {
 
     UserBuilder users = User.builder();
+
+    // ArrayList<UserDetails> detailUsers = new ArrayList<UserDetails>();
+    // ArrayList<Users> dbUsers = usersMapper.selectAll();
+    // Roles roles;
+
+    // for (Users user : dbUsers) {
+    // roles = rolesMapper.selectRoles(user.getRoles());
+    // detailUsers.add(users.username(user.getPname()).password(user.getPasswd()).roles(roles.getRolName()).build());
+    // }
 
     UserDetails user1 = users
         .username("user1")
@@ -55,7 +78,10 @@ public class JinrouAuthConfiguration {
         .roles("USER")
         .build();
 
-    return new InMemoryUserDetailsManager(user1, user2, user3, user4, user5, user6);
+    return new InMemoryUserDetailsManager(user1, user2, user3, user4, user5,
+        user6);
+    // return new InMemoryUserDetailsManager(detailUsers);
+
   }
 
   /**
@@ -83,7 +109,7 @@ public class JinrouAuthConfiguration {
    * @return BCryptPasswordEncoderを返す
    */
   @Bean
-  PasswordEncoder passwordEncoder() {
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
