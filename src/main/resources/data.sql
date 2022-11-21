@@ -1,5 +1,11 @@
-INSERT INTO users (room,pname,roles,isdeath) VALUES (1,'ほんだ',1,true);
-INSERT INTO users (room,pname,roles,isdeath) VALUES (1,'いがき',1,true);
-INSERT INTO users (room,pname,roles,isdeath) VALUES (1,'ふくやす',1,true);
-INSERT INTO users (room,pname,roles,isdeath) VALUES (1,'おおうち',1,true);
-INSERT INTO users (room,pname,roles,isdeath) VALUES (1,'たぶち',2,true);
+INSERT INTO rooms (settingId, roomName, roomPass, roopCount,wolfNum, winner, isActive) VALUES (1,'PUBLIC',123,0, 0,0,false);
+
+INSERT INTO settings ( startCount ) VALUES (2);
+-- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
+-- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
+-- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
+-- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,2,true);
+
+INSERT INTO roles ( rolName, isVillager ) VALUES ( 'VILLAGER', 1 );
+INSERT INTO roles ( rolName, isVillager ) VALUES ( 'WOLF', 2 );
+INSERT INTO roles ( rolName, isVillager ) VALUES ( 'USER', 0 );

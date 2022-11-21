@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>チームおおうち|Jinrou</title>
+  <script>
+    var sse = new EventSource('/jinrou/wait-start');
+    var interval_id = null;
+    window.addEventListener('DOMContentLoaded', function () {
+      interval_id = setInterval(() => {
+        sse.onmessage = function (event) {
+          console.log("sse.onmessage")
+          console.log(event.data);
+          var resultData = JSON.parse(event.data);
+          var result = "";
+          resultData.forEach(data => {
+            result += "<div th:if=\"${roomId}\"==" + data.roomId + ">";
+            result += "<a href =\" /jinrou/match?roomId=" + data.roomId + "\">役割を確認して初夜へ(" + data.roomName + ")</a>";
+            result += "</div>";
+          });
+          console.log(result);
+          var div = document.getElementById("result");
+          div.innerHTML = result;
+          clearInterval(interval_id);
+        }
+      }, 1000);
+    });
+  </script>
+</head>
+
+<body>
+  <h1>対戦相手を募集中です。少々お待ちください。</h1>
+  <div th:if="${userName}">あなたのユーザ名は[[${userName}]]です。</div>
+  <h2>開始しているゲーム</h2>
+  <div id="result"></div>
+  <div><a href="/logout">ログアウト</a></div>
+</body>
+
+</html>
