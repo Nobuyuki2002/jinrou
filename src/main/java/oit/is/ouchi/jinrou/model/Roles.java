@@ -1,6 +1,6 @@
 package oit.is.ouchi.jinrou.model;
 
-import javax.management.relation.Role;
+//import javax.management.relation.Role;
 
 public class Roles {
   int rolId;

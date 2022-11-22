@@ -1,20 +1,22 @@
 package oit.is.ouchi.jinrou.service;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.ouchi.jinrou.model.Count;
 import oit.is.ouchi.jinrou.model.Rooms;
 import oit.is.ouchi.jinrou.model.RoomsMapper;
 import oit.is.ouchi.jinrou.model.UsersMapper;
+//import oit.is.ouchi.jinrou.model.Users;
 
 @Service
 public class AsyncEntry {
@@ -39,17 +41,19 @@ public class AsyncEntry {
 
   @Async
   public void syncCheckEntry(SseEmitter emitter) {
+    //int cnt=0;
     int i = 1;
     dbUpdated = true;
     ArrayList<Rooms> rooms = new ArrayList<Rooms>();
     Rooms room = new Rooms();
     try {
-      while (true) {// 無限ループ
         // DBが更新されていなければ0.5s休み
-        if (false == dbUpdated) {
-          TimeUnit.MILLISECONDS.sleep(500);
-          continue;
-        }
+        // System.out.println("service"+(cnt++));
+        // if (false == dbUpdated) {
+        //   TimeUnit.MILLISECONDS.sleep(500);
+        //   continue;
+        // }
+        // System.out.println("DBupdate");
         Count count = roomsMapper.selectCountRoom();
         Count startRoomCount;
         Count countPlayer;
@@ -63,9 +67,7 @@ public class AsyncEntry {
           i++;
         }
         emitter.send(rooms);
-        TimeUnit.MILLISECONDS.sleep(1000); // 1秒おき
-        dbUpdated = false;
-      }
+        // dbUpdated = false;
     } catch (Exception e) {
       // 例外の名前とメッセージだけ表示する
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
@@ -74,5 +76,11 @@ public class AsyncEntry {
     }
     System.out.println("AsyncEntry complete");
   }
+
+  // @Transactional
+  // public void insertUser(Users user){
+  //   usersMapper.insertUsers(user);
+  //   dbUpdated = true;
+  // }
 
 }
