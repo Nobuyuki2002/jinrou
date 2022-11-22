@@ -18,6 +18,9 @@ public interface UsersMapper {
   @Select("select * from users where lname = #{lname}")
   Users selectByName(String lname);
 
+  @Select("select * from users where room = #{room} and isDeath = false")
+  ArrayList<Users> selectAliveUsers(int room);
+
   @Select("SELECT COUNT(room) as count FROM users WHERE room = #{roomId}")
   Count selectCountByRoomId(int roomId);
 
