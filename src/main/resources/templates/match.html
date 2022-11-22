@@ -10,6 +10,26 @@
   <div th:if="${roles}">
     <h1>あなたの役割は"[[${roles}]]"</h1>
   </div>
+
+  <div>
+    <table border="1">
+      <thead>
+        <th>id</th>
+        <th>名前</th>
+        <th>投票</th>
+      </thead>
+      <tbody>
+        <span th:if="${users}">
+          <tr th:each="user,stat:${users}">
+            <td>[[${user.id}]]</td>
+            <td>[[${user.pname}]]</td>
+            <td><a th:href="@{/jinrou/vote(id=${user.id})}">投票</a></td>
+          </tr>
+        </span>
+      </tbody>
+    </table>
+  </div>
+
   <div><a href="/logout">ログアウト</a></div>
 </body>
 

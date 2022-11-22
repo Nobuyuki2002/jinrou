@@ -53,7 +53,7 @@ public class JinrouController {
   @PostMapping("entry")
   @Transactional
   public String entry(@RequestParam String pname, ModelMap model, Principal prin) {
-    Users user = new Users(prin.getName(), pname, 1, 3, true, -1);
+    Users user = new Users(prin.getName(), pname, 1, 3, false, -1);
     Users tmp = new Users();
     if ((tmp = usersMapper.selectByName(pname)) == null) {
       usersMapper.insertUsers(user);
@@ -69,6 +69,7 @@ public class JinrouController {
   @GetMapping("match")
   public String match(@RequestParam Integer roomId, Principal prin, ModelMap model) {
     Users user;
+    ArrayList<Users> users;
     Rooms room = roomsMapper.selectById(roomId);
     Roles roles;
     Count count = usersMapper.selectCountByRoomId(roomId);
@@ -92,7 +93,14 @@ public class JinrouController {
     roles = rolesMapper.selectRoles(user.getRoles());
     model.addAttribute("roomName", room.getRoomName());
     model.addAttribute("roles", roles.getRolName());
+    users = usersMapper.selectAliveUsers(roomId);
+    model.addAttribute("users", users);
     return "match.html";
+  }
+
+  @GetMapping("vote")
+  public String vote(@RequestParam Integer id, Principal prin, ModelMap model) {
+    return "disc.html";
   }
 
   @GetMapping("/wait-start")
@@ -101,4 +109,5 @@ public class JinrouController {
     this.entryService.syncCheckEntry(sseEmitter);
     return sseEmitter;
   }
+
 }
