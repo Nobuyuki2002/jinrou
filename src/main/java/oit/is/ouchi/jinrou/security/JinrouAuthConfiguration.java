@@ -1,6 +1,6 @@
 package oit.is.ouchi.jinrou.security;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import oit.is.ouchi.jinrou.model.Roles;
+//import oit.is.ouchi.jinrou.model.Roles;
 import oit.is.ouchi.jinrou.model.RolesMapper;
-import oit.is.ouchi.jinrou.model.Users;
+//import oit.is.ouchi.jinrou.model.Users;
 import oit.is.ouchi.jinrou.model.UsersMapper;
 
 @EnableWebSecurity
