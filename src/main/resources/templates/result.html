@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>チームおおうち|Jinrou</title>
+</head>
+
+<body>
+  <div th:if="${death}">
+    <h1>投票の結果[[${death.pname}]]を処刑します。</h1>
+  </div>
+  <div th:unless="${death}">
+    <h1>投票数が引き分けたため、処刑を行いません。</h1>
+  </div>
+  <div th:if="${roomId}">
+    <sapn><a th:href="@{/jinrou/match(roomId=${roomId})}">次の日へ</a></sapn>
+  </div>
+</body>
+
+</html>

@@ -23,4 +23,7 @@ public interface RoomsMapper {
   @Update("UPDATE rooms set wolfNum = #{wolfNum} WHERE roomId = #{roomId}")
   void updateWolfNum(Rooms room);
 
+  @Update("UPDATE rooms SET roopCount = #{roopCount} WHERE roomId = #{roomId}")
+  void updateRoopCount(Rooms room);
+
 }

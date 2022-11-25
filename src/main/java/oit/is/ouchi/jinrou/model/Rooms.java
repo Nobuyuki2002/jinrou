@@ -17,7 +17,7 @@ public class Rooms {
     this.settingId = settingId;
     this.roomName = roomName;
     this.roomPass = roomPass;
-    this.roopCount = 0;
+    this.roopCount = -1;
     this.wolfNum = 0;
     this.winner = 0;
     this.isActive = true;
