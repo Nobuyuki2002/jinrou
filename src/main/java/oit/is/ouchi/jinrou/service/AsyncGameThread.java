@@ -30,6 +30,70 @@ public class AsyncGameThread {
   RoomsMapper roomsMapper;
 
   @Async
+  public void syncCheckEntryDiscuttion(SseEmitter emitter) {
+    // int cnt=0;
+    int i = 1;
+    ArrayList<Rooms> rooms = new ArrayList<Rooms>();
+    Rooms room;
+    try {
+      Count count = roomsMapper.selectCountRoom();
+      int aliveCount;
+      Count countPlayer;
+      while (i <= count.getCount()) {
+        aliveCount = usersMapper.selectAliveUsers(i).size();
+        countPlayer = usersMapper.selectJobVoteCount(i);
+        if (aliveCount <= countPlayer.getCount()) {
+          ArrayList<Users> aliveUsersInRoom = usersMapper.selectAliveUsers(i);
+          // 人狼が2日目以降、誰かを殺害する
+          for (Users alive : aliveUsersInRoom) {
+            if (alive.getRoles() == 2 && roomsMapper.selectById(i).getRoopCount() > 2) {
+              Users killed = usersMapper.selectById(alive.getJobVote());
+              killed.setDeath(true);
+              usersMapper.updateDeath(killed);
+              break;
+            }
+            if (alive.getRoles() == 2 && roomsMapper.selectById(i).getRoopCount() * (-1) > 2) {
+              Users killed = usersMapper.selectById(alive.getJobVote());
+              killed.setDeath(true);
+              usersMapper.updateDeath(killed);
+              break;
+            }
+          }
+          room = roomsMapper.selectById(i);
+
+          // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
+          if (usersMapper.selectCountByRoleId(i, 1).getCount() <= 1) {
+            room.setActive(false);
+            room.setRoopCount(-1);
+            room.setWinner(1);
+            room.setWolfNum(0);
+            room.setWinner(2);
+            roomsMapper.updateRoom(room);
+          }
+          if (usersMapper.selectCountByRoleId(i, 2).getCount() < 1) {
+            room.setActive(false);
+            room.setRoopCount(-1);
+            room.setWinner(1);
+            room.setWolfNum(0);
+            room.setWinner(1);
+            roomsMapper.updateRoom(room);
+          }
+          rooms.add(room);
+        }
+        i++;
+      }
+      emitter.send(rooms);
+      // dbUpdated = false;
+    } catch (Exception e) {
+      // 例外の名前とメッセージだけ表示する
+      logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
+    } finally {
+      emitter.complete();
+    }
+    System.out.println("AsyncEntry complete");
+  }
+
+  @Async
   public void syncCheckJobVote(SseEmitter emitter) {
 
     int i = 1;
@@ -74,6 +138,23 @@ public class AsyncGameThread {
         countPlayer = usersMapper.selectKillVoteCount(i);
         if (aliveCount <= countPlayer.getCount()) {
           room = roomsMapper.selectById(i);
+          // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
+          // if (usersMapper.selectCountByRoleId(i, 1).getCount() <= 1) {
+          //   room.setActive(false);
+          //   room.setRoopCount(-1);
+          //   room.setWinner(1);
+          //   room.setWolfNum(0);
+          //   room.setWinner(2);
+          //   roomsMapper.updateRoom(room);
+          // }
+          // if (usersMapper.selectCountByRoleId(i, 2).getCount() < 1) {
+          //   room.setActive(false);
+          //   room.setRoopCount(-1);
+          //   room.setWinner(1);
+          //   room.setWolfNum(0);
+          //   room.setWinner(1);
+          //   roomsMapper.updateRoom(room);
+          // }
           rooms.add(room);
         }
         i++;

@@ -7,11 +7,12 @@
 
 <body>
   <div th:if="${roomName}">ようこそ、[[${roomName}]]へ</div>
+  <div th:if="${roopCount}">[[${roopCount}]]日目</div>
   <div th:if="${roles}">
     <h1>あなたの役割は"[[${roles.rolName}]]"</h1>
     <div th:if="${roles.rolId}==2">
-      <span th:if="${roopCount} == 0">疑わしい人に投票しましょう。</span>
-      <span th:if="${roopCount} >= 1">殺害する人を決定しましょう。</span>
+      <span th:if="${roopCount} == 1">疑わしい人に投票しましょう。</span>
+      <span th:if="${roopCount} >= 2">殺害する人を決定しましょう。</span>
     </div>
     <div th:if="${roles.rolId}==1">
       <span>疑わしい人に投票しましょう。</span>

@@ -50,4 +50,8 @@ public interface UsersMapper {
 
   @Select("SELECT COUNT(*) as count FROM users WHERE killVote >= 0 and room = #{room};")
   Count selectKillVoteCount(int room);
+
+  @Select("SELECT COUNT(*) as count FROM users WHERE room = #{room} and roles = #{roles};")
+  Count selectCountByRoleId(int room, int roles);
+
 }

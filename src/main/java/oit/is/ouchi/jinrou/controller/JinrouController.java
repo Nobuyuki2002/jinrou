@@ -74,51 +74,66 @@ public class JinrouController {
   }
 
   @GetMapping("match")
+  @Transactional
   public String match(@RequestParam Integer roomId, Principal prin, ModelMap model) {
     Users user;
     ArrayList<Users> users;
     Rooms room = roomsMapper.selectById(roomId);
     Roles roles;
-    Count count = usersMapper.selectCountByRoomId(roomId);
-    int wolfNum = room.getWolfNum();
     user = usersMapper.selectByName(prin.getName());
+    if (!room.isActive()) {
+      return "close.html";
+    }
     if (user.isDeath()) {
       return "death.html";
     }
-    if (room.getRoopCount() < 0) {
-      room.setRoopCount(((-1) * room.getRoopCount()) + 1);
-      roomsMapper.updateRoopCount(room);
-    }
-    if (wolfNum == 0) {
-      wolfNum = (int) (Math.random() * count.getCount()) + 1;
-      room.setWolfNum(wolfNum);
-      roomsMapper.updateWolfNum(room);
-      ArrayList<Users> roomMember = usersMapper.selectByRoomId(roomId);
-      for (Users tmp : roomMember) {
-        if (wolfNum == tmp.getId()) {
-          tmp.setRoles(2);
-        } else {
-          tmp.setRoles(1);
-        }
-        usersMapper.updateRole(tmp);
-      }
-    }
+
     roles = rolesMapper.selectRoles(user.getRoles());
     model.addAttribute("roomName", room.getRoomName());
     model.addAttribute("roles", roles);
     users = usersMapper.selectAliveUsers(roomId);
     model.addAttribute("users", users);
-    model.addAttribute("roopCount", room.getRoopCount());
+    if ((-1) * room.getRoopCount() >= 1) {
+      model.addAttribute("roopCount", room.getRoopCount() * (-1));
+    }
     return "match.html";
   }
 
   @GetMapping("job")
   public String job(@RequestParam Integer id, Principal prin, ModelMap model) {
     Users loginUser = usersMapper.selectByName(prin.getName());
+    Rooms room = roomsMapper.selectById(loginUser.getRoom());
     loginUser.setJobVote(id);
     usersMapper.updateJobVote(loginUser);
     loginUser.setKillVote(-1);
     usersMapper.updateKillVote(loginUser);
+    model.addAttribute("roomId", loginUser.getRoom());
+    model.addAttribute("userId", loginUser.getId());
+    if (room.getRoopCount() < 0) {
+      room.setRoopCount(((-1) * room.getRoopCount()) + 1);
+      roomsMapper.updateRoopCount(room);
+    }
+    return "discWait.html";
+  }
+
+  @GetMapping("discuttion")
+  public String discuttion(Principal prin, ModelMap model) {
+    Users loginUser = usersMapper.selectByName(prin.getName());
+    // Rooms room = roomsMapper.selectById(loginUser.getRoom());
+    // loginUser.setJobVote(id);
+    // usersMapper.updateJobVote(loginUser);
+    // loginUser.setKillVote(-1);
+    // usersMapper.updateKillVote(loginUser);
+    if (!roomsMapper.selectById(loginUser.getRoom()).isActive()) {
+      return "close.html";
+    }
+    if (loginUser.isDeath()) {
+      return "death.html";
+    }
+    // if (room.getRoopCount() < 0) {
+    // room.setRoopCount(((-1) * room.getRoopCount()) + 1);
+    // roomsMapper.updateRoopCount(room);
+    // }
     model.addAttribute("roomId", loginUser.getRoom());
     return "disc.html";
   }
@@ -133,6 +148,7 @@ public class JinrouController {
     killMaxIndex = -1;
     if (room.getRoopCount() >= 0) {
       room.setRoopCount(room.getRoopCount() * -1);
+      roomsMapper.updateRoopCount(room);
     }
     return "discFinish.html";
   }
@@ -143,14 +159,17 @@ public class JinrouController {
     loginUser.setJobVote(-1);
     usersMapper.updateJobVote(loginUser);
 
-    // 死ぬ人が決まっていた場合に処理
+    // 死ぬ人が決まっていない場合に処理
     if (killMaxIndex < 0) {
+      System.out.println("test1");
       ArrayList<Users> users = usersMapper.selectAliveUsers(roomId);
-      int[] vote = new int[users.size()];
+      int[] vote = new int[10];
+      System.out.println("test2");
 
       for (Users user : users) {
         vote[user.getKillVote() - 1]++;
       }
+      System.out.println("test3");
       int max = vote[0];
       killMaxIndex = 0;
       killFlag = true;
@@ -165,7 +184,7 @@ public class JinrouController {
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
     }
-
+    System.out.println("test4");
     if (killFlag) {
       Users deathUser = usersMapper.selectById(killMaxIndex + 1);
       model.addAttribute("death", deathUser);
@@ -173,12 +192,13 @@ public class JinrouController {
       usersMapper.updateDeath(deathUser);
     }
     // 死ぬ人を決める処理
+    System.out.println("test5");
     model.addAttribute("roomId", roomId);
     return "result.html";
   }
 
   @GetMapping("/wait-start")
-  public SseEmitter result() {
+  public SseEmitter waitStart() {
     final SseEmitter sseEmitter = new SseEmitter();
     this.entryService.syncCheckEntry(sseEmitter);
     return sseEmitter;
@@ -188,6 +208,13 @@ public class JinrouController {
   public SseEmitter jobVote() {
     final SseEmitter sseEmitter = new SseEmitter();
     this.gameService.syncCheckJobVote(sseEmitter);
+    return sseEmitter;
+  }
+
+  @GetMapping("/wait-disc")
+  public SseEmitter disc() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.gameService.syncCheckEntryDiscuttion(sseEmitter);
     return sseEmitter;
   }
 
