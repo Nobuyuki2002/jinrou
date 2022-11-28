@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import oit.is.ouchi.jinrou.model.Count;
 import oit.is.ouchi.jinrou.model.Rooms;
 import oit.is.ouchi.jinrou.model.RoomsMapper;
+import oit.is.ouchi.jinrou.model.Users;
 import oit.is.ouchi.jinrou.model.UsersMapper;
 //import oit.is.ouchi.jinrou.model.Users;
 
@@ -41,33 +42,41 @@ public class AsyncEntry {
 
   @Async
   public void syncCheckEntry(SseEmitter emitter) {
-    //int cnt=0;
+    // int cnt=0;
     int i = 1;
-    dbUpdated = true;
     ArrayList<Rooms> rooms = new ArrayList<Rooms>();
-    Rooms room = new Rooms();
+    Rooms room;
     try {
-        // DBが更新されていなければ0.5s休み
-        // System.out.println("service"+(cnt++));
-        // if (false == dbUpdated) {
-        //   TimeUnit.MILLISECONDS.sleep(500);
-        //   continue;
-        // }
-        // System.out.println("DBupdate");
-        Count count = roomsMapper.selectCountRoom();
-        Count startRoomCount;
-        Count countPlayer;
-        while (i <= count.getCount()) {
-          startRoomCount = roomsMapper.selectStartRoomCount(i);
-          countPlayer = usersMapper.selectCountByRoomId(i);
-          if (startRoomCount.getCount() <= countPlayer.getCount()) {
-            room = roomsMapper.selectById(i);
-            rooms.add(room);
+      Count count = roomsMapper.selectCountRoom();
+      Count startRoomCount;
+      Count countPlayer;
+      while (i <= count.getCount()) {
+        startRoomCount = roomsMapper.selectStartRoomCount(i);
+        countPlayer = usersMapper.selectCountByRoomId(i);
+        if (startRoomCount.getCount() <= countPlayer.getCount()) {
+          room = roomsMapper.selectById(i);
+          rooms.add(room);
+          Count countRoomMember = usersMapper.selectCountByRoomId(i);
+          int wolfNum = room.getWolfNum();
+          if (wolfNum == 0) {
+            wolfNum = (int) (Math.random() * countRoomMember.getCount()) + 1;
+            room.setWolfNum(wolfNum);
+            roomsMapper.updateWolfNum(room);
+            ArrayList<Users> roomMember = usersMapper.selectByRoomId(i);
+            for (Users tmp : roomMember) {
+              if (wolfNum == tmp.getId()) {
+                tmp.setRoles(2);
+              } else {
+                tmp.setRoles(1);
+              }
+              usersMapper.updateRole(tmp);
+            }
           }
-          i++;
         }
-        emitter.send(rooms);
-        // dbUpdated = false;
+        i++;
+      }
+      emitter.send(rooms);
+      // dbUpdated = false;
     } catch (Exception e) {
       // 例外の名前とメッセージだけ表示する
       logger.warn("Exception:" + e.getClass().getName() + ":" + e.getMessage());
@@ -79,8 +88,8 @@ public class AsyncEntry {
 
   // @Transactional
   // public void insertUser(Users user){
-  //   usersMapper.insertUsers(user);
-  //   dbUpdated = true;
+  // usersMapper.insertUsers(user);
+  // dbUpdated = true;
   // }
 
 }
