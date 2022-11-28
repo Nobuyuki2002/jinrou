@@ -8,21 +8,21 @@
     var interval_id = null;
     window.addEventListener('DOMContentLoaded', function () {
       interval_id = setInterval(() => {
-        sse = new EventSource('/jinrou/wait-game');
+        sse = new EventSource('/jinrou/wait-vote');
         sse.onmessage = function (event) {
-          clearInterval(interval_id);
           console.log("sse.onmessage")
           console.log(event.data);
           var resultData = JSON.parse(event.data);
           var result = "";
-          result += "<div><ul>";
           resultData.forEach(data => {
-            result += "<li th:if=\"${roomId}\"==" + data.room + "><a href =\" /jinrou/vote?id=" + data.id + "\">" + data.pname + "</a></li>";
+            result += "<div th:if=\"${roomId}\"==" + data.roomId + ">";
+            result += "<a href =\" /jinrou/result?roomId=" + data.roomId + "\">投票結果を見る</a>";
+            result += "</div>";
           });
-          result += "</ul></div>";
           console.log(result);
           var div = document.getElementById("result");
           div.innerHTML = result;
+          clearInterval(interval_id);
         }
       }, 1000);
     });
@@ -30,8 +30,9 @@
 </head>
 
 <body>
-  <h1>会議中</h1>
+  <h1>投票中です。少々お待ちください。</h1>
   <div id="result"></div>
+  <div><a href="/logout">ログアウト</a></div>
 </body>
 
 </html>

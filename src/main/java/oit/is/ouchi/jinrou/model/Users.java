@@ -7,18 +7,20 @@ public class Users {
   int room;
   int roles;
   boolean isDeath;
-  int vote;
+  int jobVote;
+  int killVote;
 
   public Users() {
   }
 
-  public Users(String lname, String pname, int room, int roles, boolean isDeath, int vote) {
+  public Users(String lname, String pname, int room, int roles) {
     this.lname = lname;
     this.pname = pname;
     this.room = room;
-    this.isDeath = isDeath;
+    this.isDeath = false;
     this.roles = roles;
-    this.vote = vote;
+    this.jobVote = -1;
+    this.killVote = -1;
   }
 
   public int getId() {
@@ -69,12 +71,20 @@ public class Users {
     this.isDeath = isDeath;
   }
 
-  public int getVote() {
-    return vote;
+  public int getJobVote() {
+    return jobVote;
   }
 
-  public void setVote(int vote) {
-    this.vote = vote;
+  public void setJobVote(int jobVote) {
+    this.jobVote = jobVote;
+  }
+
+  public int getKillVote() {
+    return killVote;
+  }
+
+  public void setKillVote(int killVote) {
+    this.killVote = killVote;
   }
 
 }

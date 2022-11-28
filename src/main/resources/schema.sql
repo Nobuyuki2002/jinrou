@@ -5,7 +5,8 @@ CREATE TABLE users (
     room INT NOT NULL,
     roles INT NOT NULL,
     isDeath BOOLEAN,
-    vote INT
+    jobVote INT,
+    killVote INT
 );
 
 CREATE TABLE roles (
