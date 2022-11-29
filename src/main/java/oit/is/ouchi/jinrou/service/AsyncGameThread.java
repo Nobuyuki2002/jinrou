@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.ouchi.jinrou.model.Count;
@@ -59,25 +59,8 @@ public class AsyncGameThread {
               break;
             }
           }
+          gameJudge(i);
           room = roomsMapper.selectById(i);
-
-          // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
-          if (usersMapper.selectCountByRoleId(i, 1).getCount() <= 1) {
-            room.setActive(false);
-            room.setRoopCount(-1);
-            room.setWinner(1);
-            room.setWolfNum(0);
-            room.setWinner(2);
-            roomsMapper.updateRoom(room);
-          }
-          if (usersMapper.selectCountByRoleId(i, 2).getCount() < 1) {
-            room.setActive(false);
-            room.setRoopCount(-1);
-            room.setWinner(1);
-            room.setWolfNum(0);
-            room.setWinner(1);
-            roomsMapper.updateRoom(room);
-          }
           rooms.add(room);
         }
         i++;
@@ -138,23 +121,7 @@ public class AsyncGameThread {
         countPlayer = usersMapper.selectKillVoteCount(i);
         if (aliveCount <= countPlayer.getCount()) {
           room = roomsMapper.selectById(i);
-          // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
-          // if (usersMapper.selectCountByRoleId(i, 1).getCount() <= 1) {
-          //   room.setActive(false);
-          //   room.setRoopCount(-1);
-          //   room.setWinner(1);
-          //   room.setWolfNum(0);
-          //   room.setWinner(2);
-          //   roomsMapper.updateRoom(room);
-          // }
-          // if (usersMapper.selectCountByRoleId(i, 2).getCount() < 1) {
-          //   room.setActive(false);
-          //   room.setRoopCount(-1);
-          //   room.setWinner(1);
-          //   room.setWolfNum(0);
-          //   room.setWinner(1);
-          //   roomsMapper.updateRoom(room);
-          // }
+          gameJudge(room.getRoomId());
           rooms.add(room);
         }
         i++;
@@ -168,4 +135,27 @@ public class AsyncGameThread {
     System.out.println("AsyncEntry complete");
   }
 
+  @Transactional
+  public void gameJudge(int roomId) {
+    System.out.println("gameJadge");
+    System.out.println(usersMapper.selectCountByRoleId(roomId, 1, false).getCount());
+    Rooms room = roomsMapper.selectById(roomId);
+    // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
+    if (usersMapper.selectCountByRoleId(roomId, 1, false).getCount() <= 1) {
+      System.out.println("gameJudge1");
+      room.setActive(false);
+      room.setRoopCount(-1);
+      room.setWolfNum(0);
+      room.setWinner(2);
+      roomsMapper.updateRoom(room);
+    }
+    if (usersMapper.selectCountByRoleId(roomId, 2, false).getCount() < 1) {
+      System.out.println("gameJudge2");
+      room.setActive(false);
+      room.setRoopCount(-1);
+      room.setWolfNum(0);
+      room.setWinner(1);
+      roomsMapper.updateRoom(room);
+    }
+  }
 }
