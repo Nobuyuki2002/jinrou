@@ -2,6 +2,7 @@ package oit.is.ouchi.jinrou.model;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -52,6 +53,8 @@ public interface UsersMapper {
   Count selectKillVoteCount(int room);
 
   @Select("SELECT COUNT(*) as count FROM users WHERE room = #{room} and roles = #{roles} and isDeath = #{isDeath};")
-  Count selectCountByRoleId(int room, int roles,boolean isDeath);
+  Count selectCountByRoleId(int room, int roles, boolean isDeath);
 
+  @Delete("DELETE FROM users WHERE room = #{room};")
+  void deleteUsersByRoom(int room);
 }
