@@ -80,11 +80,19 @@ public class JinrouController {
     ArrayList<Users> users;
     Rooms room = roomsMapper.selectById(roomId);
     Roles roles;
-    user = usersMapper.selectByName(prin.getName());
     if (!room.isActive()) {
-      model.addAttribute("winner", rolesMapper.selectRoles(room.getWinner()).getRolName());
+      switch (room.getWinner()) {
+        case 1:
+          model.addAttribute("winner", "村人陣営");
+          break;
+        case 2:
+          model.addAttribute("winner", "人狼陣営");
+          break;
+      }
+      usersMapper.deleteUsersByRoom(room.getRoomId());
       return "close.html";
     }
+    user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
       return "death.html";
     }
@@ -120,21 +128,24 @@ public class JinrouController {
   @GetMapping("discuttion")
   public String discuttion(Principal prin, ModelMap model) {
     Users loginUser = usersMapper.selectByName(prin.getName());
-    // Rooms room = roomsMapper.selectById(loginUser.getRoom());
-    // loginUser.setJobVote(id);
-    // usersMapper.updateJobVote(loginUser);
-    // loginUser.setKillVote(-1);
-    // usersMapper.updateKillVote(loginUser);
-    if (!roomsMapper.selectById(loginUser.getRoom()).isActive()) {
+    Rooms room = roomsMapper.selectById(loginUser.getRoom());
+
+    if (!room.isActive()) {
+      switch (room.getWinner()) {
+        case 1:
+          model.addAttribute("winner", "村人陣営");
+          break;
+        case 2:
+          model.addAttribute("winner", "人狼陣営");
+          break;
+      }
+      usersMapper.deleteUsersByRoom(room.getRoomId());
       return "close.html";
     }
     if (loginUser.isDeath()) {
       return "death.html";
     }
-    // if (room.getRoopCount() < 0) {
-    // room.setRoopCount(((-1) * room.getRoopCount()) + 1);
-    // roomsMapper.updateRoopCount(room);
-    // }
+
     model.addAttribute("roomId", loginUser.getRoom());
     return "disc.html";
   }

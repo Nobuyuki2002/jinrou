@@ -22,14 +22,12 @@
   <div>
     <table border="1">
       <thead>
-        <th>id</th>
         <th>名前</th>
         <th>投票</th>
       </thead>
       <tbody>
         <span th:if="${users}">
           <tr th:each="user,stat:${users}">
-            <td>[[${user.id}]]</td>
             <td>[[${user.pname}]]</td>
             <td><a th:href="@{/jinrou/job(id=${user.id})}">投票</a></td>
           </tr>
