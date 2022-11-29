@@ -26,7 +26,7 @@ public interface RoomsMapper {
   @Update("UPDATE rooms SET roopCount = #{roopCount} WHERE roomId = #{roomId}")
   void updateRoopCount(Rooms room);
 
-  @Update("UPDATE rooms SET roomName = #{roomName}, roomPass = #{roomPass}, roopCount = #{roopCount}, wolfNum = #{wolfNum}, winner = #{winner} isActive = #{isActive} WHERE roomId = #{roomId};")
+  @Update("UPDATE rooms SET roomName = #{roomName}, roomPass = #{roomPass}, roopCount = #{roopCount}, wolfNum = #{wolfNum}, winner = #{winner}, isActive = #{isActive} WHERE roomId = #{roomId};")
   void updateRoom(Rooms room);
 
 }

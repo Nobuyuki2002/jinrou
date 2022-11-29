@@ -82,6 +82,7 @@ public class JinrouController {
     Roles roles;
     user = usersMapper.selectByName(prin.getName());
     if (!room.isActive()) {
+      model.addAttribute("winner", rolesMapper.selectRoles(room.getWinner()).getRolName());
       return "close.html";
     }
     if (user.isDeath()) {
