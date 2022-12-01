@@ -46,6 +46,9 @@ public interface UsersMapper {
   @Update("UPDATE users SET isDeath = #{isDeath} WHERE id = #{id};")
   void updateDeath(Users user);
 
+  @Update("UPDATE users SET room = #{room} WHERE id = #{id};")
+  void updateRoomId(Users user);
+
   @Select("SELECT COUNT(*) as count FROM users WHERE jobVote >= 0 and room = #{room};")
   Count selectJobVoteCount(int room);
 

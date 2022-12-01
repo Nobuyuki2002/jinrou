@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>チームおおうち|Jinrou</title>
+</head>
+
+<body>
+  <h1>こんにちは,チーム大内です。</h1>
+  <P>
+    ルーム作成
+  <form th:action="@{/jinrou/make}" method="post">
+    ルーム名<input type="text" name="roomName" />
+    パスワード<input type="text" name="roomPass" />
+    <input type="submit" value="作成">
+  </form>
+  </P>
+</body>
+
+</html>

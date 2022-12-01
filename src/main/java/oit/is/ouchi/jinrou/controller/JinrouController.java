@@ -52,24 +52,50 @@ public class JinrouController {
     if ((tmp = usersMapper.selectByName(prin.getName())) == null) {
       return "createUser.html";
     }
+    if (tmp.getRoom() < 0) {
+      System.out.println("マッチング！！");
+      return "matching.html";
+    }
     model.addAttribute("roomId", tmp.getId());
     model.addAttribute("userName", tmp.getPname());
     return "gameWait.html";
   }
 
+  @PostMapping("make")
+  @Transactional
+  public String make(@RequestParam String roomName, @RequestParam int roomPass, ModelMap model, Principal prin) {
+    Rooms room = new Rooms(1, roomName, roomPass);
+    Users user = usersMapper.selectByName(prin.getName());
+
+    if ((roomsMapper.selectByName(roomName)) == null) {
+      roomsMapper.insertRooms(room);
+      room = roomsMapper.selectByName(roomName);
+      user.setRoom(room.getRoomId());
+      usersMapper.updateRoomId(user);
+      model.addAttribute("roomId", room.getRoomId());
+      model.addAttribute("userName", prin.getName());
+      return "gameWait.html";
+    }
+    return "matching.html";
+  }
+
   @PostMapping("entry")
   @Transactional
   public String entry(@RequestParam String pname, ModelMap model, Principal prin) {
-    Users user = new Users(prin.getName(), pname, 1, 3);
+    Users user = new Users(prin.getName(), pname, -1, 3);
     Users tmp = new Users();
     if ((tmp = usersMapper.selectByName(pname)) == null) {
       usersMapper.insertUsers(user);
-      model.addAttribute("roomId", user.getId());
-      model.addAttribute("userName", user.getPname());
-    } else {
-      model.addAttribute("roomId", tmp.getId());
-      model.addAttribute("userName", tmp.getPname());
+      return "matching.html";
     }
+    if (tmp.getRoom() < 0) {
+      System.out.println("マッチング！！");
+      return "matching.html";
+    }
+
+    model.addAttribute("roomId", tmp.getId());
+    model.addAttribute("userName", tmp.getPname());
+
     return "gameWait.html";
   }
 
@@ -89,7 +115,6 @@ public class JinrouController {
           model.addAttribute("winner", "人狼陣営");
           break;
       }
-      usersMapper.deleteUsersByRoom(room.getRoomId());
       return "close.html";
     }
     user = usersMapper.selectByName(prin.getName());
@@ -139,7 +164,6 @@ public class JinrouController {
           model.addAttribute("winner", "人狼陣営");
           break;
       }
-      usersMapper.deleteUsersByRoom(room.getRoomId());
       return "close.html";
     }
     if (loginUser.isDeath()) {
