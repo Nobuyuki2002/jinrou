@@ -79,6 +79,24 @@ public class JinrouController {
     return "matching.html";
   }
 
+  @PostMapping("join")
+  @Transactional
+  public String join(@RequestParam String roomName, @RequestParam int roomPass, ModelMap model, Principal prin) {
+    Rooms room;
+    Users user = usersMapper.selectByName(prin.getName());
+
+    if ((room = roomsMapper.selectByName(roomName)) == null || room.getRoomPass() != roomPass) {
+      return "matching.html";
+    }
+
+    user.setRoom(room.getRoomId());
+    usersMapper.updateRoomId(user);
+    model.addAttribute("roomId", room.getRoomId());
+    model.addAttribute("userName", prin.getName());
+    return "gameWait.html";
+
+  }
+
   @PostMapping("entry")
   @Transactional
   public String entry(@RequestParam String pname, ModelMap model, Principal prin) {
@@ -89,7 +107,6 @@ public class JinrouController {
       return "matching.html";
     }
     if (tmp.getRoom() < 0) {
-      System.out.println("マッチング！！");
       return "matching.html";
     }
 
