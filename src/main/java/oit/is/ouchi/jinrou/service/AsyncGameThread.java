@@ -140,6 +140,9 @@ public class AsyncGameThread {
     System.out.println("gameJadge");
     System.out.println(usersMapper.selectCountByRoleId(roomId, 1, false).getCount());
     Rooms room = roomsMapper.selectById(roomId);
+    if (!room.isActive()) {
+      return;
+    }
     // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
     if (usersMapper.selectCountByRoleId(roomId, 1, false).getCount() <= 1) {
       System.out.println("gameJudge1");

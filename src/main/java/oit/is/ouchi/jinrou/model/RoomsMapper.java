@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 //import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 
 @Mapper
 public interface RoomsMapper {
@@ -20,6 +22,9 @@ public interface RoomsMapper {
   @Select("select * from rooms where roomId = #{roomId};")
   Rooms selectById(int roomId);
 
+  @Select("select * from rooms where roomName = #{roomName} and isActive=TRUE")
+  Rooms selectByName(String roomName);
+
   @Update("UPDATE rooms set wolfNum = #{wolfNum} WHERE roomId = #{roomId}")
   void updateWolfNum(Rooms room);
 
@@ -28,5 +33,9 @@ public interface RoomsMapper {
 
   @Update("UPDATE rooms SET roomName = #{roomName}, roomPass = #{roomPass}, roopCount = #{roopCount}, wolfNum = #{wolfNum}, winner = #{winner}, isActive = #{isActive} WHERE roomId = #{roomId};")
   void updateRoom(Rooms room);
+
+  @Insert("INSERT INTO rooms (settingId, roomName, roomPass, roopCount, wolfNum, winner ,isActive) VALUES (#{settingId}, #{roomName}, #{roomPass}, -1, 0, 0, TRUE);")
+  @Options(useGeneratedKeys = true, keyColumn = "roomId", keyProperty = "roomId")
+  void insertRooms(Rooms room);
 
 }
