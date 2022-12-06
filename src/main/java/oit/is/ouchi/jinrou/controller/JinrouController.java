@@ -49,14 +49,21 @@ public class JinrouController {
   @GetMapping("/")
   public String jinrou(ModelMap model, Principal prin) {
     Users tmp = null;
+    // データベースにユーザがない場合
     if ((tmp = usersMapper.selectByName(prin.getName())) == null) {
       return "createUser.html";
     }
+
+    // ルームが閉じられている場合
+    if (!roomsMapper.selectById(tmp.getRoom()).isActive()) {
+      return "createUser.html";
+    }
+
+    // ルームが決まっていない場合
     if (tmp.getRoom() < 0) {
-      System.out.println("マッチング！！");
       return "matching.html";
     }
-    model.addAttribute("roomId", tmp.getId());
+    model.addAttribute("roomId", tmp.getRoom());
     model.addAttribute("userName", tmp.getPname());
     return "gameWait.html";
   }
@@ -79,21 +86,42 @@ public class JinrouController {
     return "matching.html";
   }
 
+  @PostMapping("join")
+  @Transactional
+  public String join(@RequestParam String roomName, @RequestParam int roomPass, ModelMap model, Principal prin) {
+    Rooms room;
+    Users user = usersMapper.selectByName(prin.getName());
+
+    if ((room = roomsMapper.selectByName(roomName)) == null || room.getRoomPass() != roomPass) {
+      return "matching.html";
+    }
+
+    user.setRoom(room.getRoomId());
+    usersMapper.updateRoomId(user);
+    model.addAttribute("roomId", room.getRoomId());
+    model.addAttribute("userName", prin.getName());
+    return "gameWait.html";
+
+  }
+
   @PostMapping("entry")
   @Transactional
   public String entry(@RequestParam String pname, ModelMap model, Principal prin) {
     Users user = new Users(prin.getName(), pname, -1, 3);
     Users tmp = new Users();
+
+    // データベースにユーザがない場合
     if ((tmp = usersMapper.selectByName(pname)) == null) {
       usersMapper.insertUsers(user);
       return "matching.html";
     }
+
+    // ルームが決まっていない場合
     if (tmp.getRoom() < 0) {
-      System.out.println("マッチング！！");
       return "matching.html";
     }
 
-    model.addAttribute("roomId", tmp.getId());
+    model.addAttribute("roomId", tmp.getRoom());
     model.addAttribute("userName", tmp.getPname());
 
     return "gameWait.html";
@@ -109,9 +137,13 @@ public class JinrouController {
     if (!room.isActive()) {
       switch (room.getWinner()) {
         case 1:
+          user = usersMapper.selectByName(prin.getName());
+          usersMapper.updateLnameByName(user);
           model.addAttribute("winner", "村人陣営");
           break;
         case 2:
+          user = usersMapper.selectByName(prin.getName());
+          usersMapper.updateLnameByName(user);
           model.addAttribute("winner", "人狼陣営");
           break;
       }
@@ -119,6 +151,7 @@ public class JinrouController {
     }
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
+      usersMapper.updateLnameByName(user);
       return "death.html";
     }
 
@@ -158,15 +191,18 @@ public class JinrouController {
     if (!room.isActive()) {
       switch (room.getWinner()) {
         case 1:
+          usersMapper.updateLnameByName(loginUser);
           model.addAttribute("winner", "村人陣営");
           break;
         case 2:
+          usersMapper.updateLnameByName(loginUser);
           model.addAttribute("winner", "人狼陣営");
           break;
       }
       return "close.html";
     }
     if (loginUser.isDeath()) {
+      usersMapper.updateLnameByName(loginUser);
       return "death.html";
     }
 
@@ -197,15 +233,12 @@ public class JinrouController {
 
     // 死ぬ人が決まっていない場合に処理
     if (killMaxIndex < 0) {
-      System.out.println("test1");
       ArrayList<Users> users = usersMapper.selectAliveUsers(roomId);
       int[] vote = new int[10];
-      System.out.println("test2");
 
       for (Users user : users) {
         vote[user.getKillVote() - 1]++;
       }
-      System.out.println("test3");
       int max = vote[0];
       killMaxIndex = 0;
       killFlag = true;
@@ -220,7 +253,6 @@ public class JinrouController {
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
     }
-    System.out.println("test4");
     if (killFlag) {
       Users deathUser = usersMapper.selectById(killMaxIndex + 1);
       model.addAttribute("death", deathUser);
@@ -228,7 +260,6 @@ public class JinrouController {
       usersMapper.updateDeath(deathUser);
     }
     // 死ぬ人を決める処理
-    System.out.println("test5");
     model.addAttribute("roomId", roomId);
     return "result.html";
   }

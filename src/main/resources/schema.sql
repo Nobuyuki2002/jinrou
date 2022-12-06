@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id IDENTITY,
-    lname VARCHAR NOT NULL,
+    lname VARCHAR,
     pname VARCHAR,
     room INT NOT NULL,
     roles INT NOT NULL,
