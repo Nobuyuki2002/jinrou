@@ -73,7 +73,7 @@ public class AsyncGameThread {
     } finally {
       emitter.complete();
     }
-    System.out.println("AsyncEntry complete");
+    System.out.println("AsyncCheckEntry complete");
   }
 
   @Async
@@ -103,7 +103,7 @@ public class AsyncGameThread {
     } finally {
       emitter.complete();
     }
-    System.out.println("AsyncEntry complete");
+    System.out.println("AsyncCheckJobVote complete");
   }
 
   @Async
@@ -132,20 +132,17 @@ public class AsyncGameThread {
     } finally {
       emitter.complete();
     }
-    System.out.println("AsyncEntry complete");
+    System.out.println("AsyncCheckKillVote complete");
   }
 
   @Transactional
   public void gameJudge(int roomId) {
-    System.out.println("gameJadge");
-    System.out.println(usersMapper.selectCountByRoleId(roomId, 1, false).getCount());
     Rooms room = roomsMapper.selectById(roomId);
     if (!room.isActive()) {
       return;
     }
     // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
     if (usersMapper.selectCountByRoleId(roomId, 1, false).getCount() <= 1) {
-      System.out.println("gameJudge1");
       room.setActive(false);
       room.setRoopCount(-1);
       room.setWolfNum(0);
@@ -153,7 +150,6 @@ public class AsyncGameThread {
       roomsMapper.updateRoom(room);
     }
     if (usersMapper.selectCountByRoleId(roomId, 2, false).getCount() < 1) {
-      System.out.println("gameJudge2");
       room.setActive(false);
       room.setRoopCount(-1);
       room.setWolfNum(0);

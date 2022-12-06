@@ -52,11 +52,15 @@ public class JinrouController {
     if ((tmp = usersMapper.selectByName(prin.getName())) == null) {
       return "createUser.html";
     }
+
+    if (!roomsMapper.selectById(tmp.getRoom()).isActive()) {
+      return "createUser.html";
+    }
+
     if (tmp.getRoom() < 0) {
-      System.out.println("マッチング！！");
       return "matching.html";
     }
-    model.addAttribute("roomId", tmp.getId());
+    model.addAttribute("roomId", tmp.getRoom());
     model.addAttribute("userName", tmp.getPname());
     return "gameWait.html";
   }
@@ -73,6 +77,7 @@ public class JinrouController {
       user.setRoom(room.getRoomId());
       usersMapper.updateRoomId(user);
       model.addAttribute("roomId", room.getRoomId());
+      System.out.println(room.getRoomId());
       model.addAttribute("userName", prin.getName());
       return "gameWait.html";
     }
@@ -106,11 +111,14 @@ public class JinrouController {
       usersMapper.insertUsers(user);
       return "matching.html";
     }
+    if (!roomsMapper.selectById(tmp.getRoom()).isActive()) {
+      return "createUser.html";
+    }
     if (tmp.getRoom() < 0) {
       return "matching.html";
     }
 
-    model.addAttribute("roomId", tmp.getId());
+    model.addAttribute("roomId", tmp.getRoom());
     model.addAttribute("userName", tmp.getPname());
 
     return "gameWait.html";
@@ -126,9 +134,13 @@ public class JinrouController {
     if (!room.isActive()) {
       switch (room.getWinner()) {
         case 1:
+          user = usersMapper.selectByName(prin.getName());
+          usersMapper.updateLnameByName(user);
           model.addAttribute("winner", "村人陣営");
           break;
         case 2:
+          user = usersMapper.selectByName(prin.getName());
+          usersMapper.updateLnameByName(user);
           model.addAttribute("winner", "人狼陣営");
           break;
       }
@@ -175,9 +187,11 @@ public class JinrouController {
     if (!room.isActive()) {
       switch (room.getWinner()) {
         case 1:
+          usersMapper.updateLnameByName(loginUser);
           model.addAttribute("winner", "村人陣営");
           break;
         case 2:
+          usersMapper.updateLnameByName(loginUser);
           model.addAttribute("winner", "人狼陣営");
           break;
       }
@@ -214,15 +228,12 @@ public class JinrouController {
 
     // 死ぬ人が決まっていない場合に処理
     if (killMaxIndex < 0) {
-      System.out.println("test1");
       ArrayList<Users> users = usersMapper.selectAliveUsers(roomId);
       int[] vote = new int[10];
-      System.out.println("test2");
 
       for (Users user : users) {
         vote[user.getKillVote() - 1]++;
       }
-      System.out.println("test3");
       int max = vote[0];
       killMaxIndex = 0;
       killFlag = true;
@@ -237,7 +248,6 @@ public class JinrouController {
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
     }
-    System.out.println("test4");
     if (killFlag) {
       Users deathUser = usersMapper.selectById(killMaxIndex + 1);
       model.addAttribute("death", deathUser);
@@ -245,7 +255,6 @@ public class JinrouController {
       usersMapper.updateDeath(deathUser);
     }
     // 死ぬ人を決める処理
-    System.out.println("test5");
     model.addAttribute("roomId", roomId);
     return "result.html";
   }
