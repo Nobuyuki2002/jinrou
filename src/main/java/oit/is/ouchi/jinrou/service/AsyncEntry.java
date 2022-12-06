@@ -51,8 +51,15 @@ public class AsyncEntry {
       Count startRoomCount;
       Count countPlayer;
       while (i <= count.getCount()) {
+        if (!roomsMapper.selectById(i).isActive()) {
+          i++;
+          continue;
+        }
+        // ルーム人数制限取得
         startRoomCount = roomsMapper.selectStartRoomCount(i);
+        // ルーム人数取得
         countPlayer = usersMapper.selectCountByRoomId(i);
+        // ルーム人数制限以上である場合
         if (startRoomCount.getCount() <= countPlayer.getCount()) {
           room = roomsMapper.selectById(i);
           rooms.add(room);

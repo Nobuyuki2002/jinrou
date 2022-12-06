@@ -60,4 +60,7 @@ public interface UsersMapper {
 
   @Delete("DELETE FROM users WHERE room = #{room};")
   void deleteUsersByRoom(int room);
+
+  @Update("UPDATE users set lname = NULL WHERE id = #{id};")
+  void updateLnameByName(Users user);
 }
