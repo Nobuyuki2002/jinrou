@@ -4,7 +4,7 @@ public class Rooms {
   int roomId;
   int settingId;
   String roomName;
-  int roomPass;
+  String roomPass;
   int roopCount;
   int wolfNum;
   int winner; // 1 : 村人陣営 2 : 人狼陣営 0 : 勝者未定
@@ -13,7 +13,7 @@ public class Rooms {
   public Rooms() {
   }
 
-  public Rooms(int settingId, String roomName, int roomPass) {
+  public Rooms(int settingId, String roomName, String roomPass) {
     this.settingId = settingId;
     this.roomName = roomName;
     this.roomPass = roomPass;
@@ -47,11 +47,11 @@ public class Rooms {
     this.roomName = roomName;
   }
 
-  public int getRoomPass() {
+  public String getRoomPass() {
     return roomPass;
   }
 
-  public void setRoomPass(int roomPass) {
+  public void setRoomPass(String roomPass) {
     this.roomPass = roomPass;
   }
 

@@ -19,7 +19,7 @@ CREATE TABLE rooms (
     roomId IDENTITY,
     settingId INT NOT NULL,
     roomName VARCHAR NOT NULL,
-    roomPass INT NOT NULL,
+    roomPass VARCHAR NOT NULL,
     roopCount INT NOT NULL,
     wolfNum INT,
     winner INT NOT NULL,
