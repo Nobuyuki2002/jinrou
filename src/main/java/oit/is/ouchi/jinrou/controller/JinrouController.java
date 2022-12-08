@@ -78,7 +78,7 @@ public class JinrouController {
       usersMapper.updateRoomId(user);
       model.addAttribute("roomId", room.getRoomId());
       System.out.println(room.getRoomId());
-      model.addAttribute("userName", prin.getName());
+      model.addAttribute("userName", user.getPname());
       return "gameWait.html";
     }
     return "matching.html";
@@ -97,7 +97,7 @@ public class JinrouController {
     user.setRoom(room.getRoomId());
     usersMapper.updateRoomId(user);
     model.addAttribute("roomId", room.getRoomId());
-    model.addAttribute("userName", prin.getName());
+    model.addAttribute("userName", user.getPname());
     return "gameWait.html";
 
   }
