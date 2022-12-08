@@ -77,9 +77,19 @@ public class JinrouAuthConfiguration {
         .password("$2y$10$XKbHjR0PpHzZp9sRO2DXQuOZ6LpzDtN1ENen3ytGfX63dBmaEzPn2")
         .roles("USER")
         .build();
+    UserDetails user7 = users
+        .username("user7")
+        .password("$2y$10$NJSQ6ZAOXrzU/AGccRJbquO4AF6XMlpgN8CjCU9iiEFbwHToEPz6i")
+        .roles("USER")
+        .build();
+    UserDetails user8 = users
+        .username("user8")
+        .password("$2y$10$rUnFGKcFOIKP7RlcmCwVoeKAs37O2t.Vc8.yz3xNaYcH3sywyolS2")
+        .roles("USER")
+        .build();
 
     return new InMemoryUserDetailsManager(user1, user2, user3, user4, user5,
-        user6);
+        user6, user7, user8);
     // return new InMemoryUserDetailsManager(detailUsers);
 
   }
