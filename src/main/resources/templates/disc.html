@@ -34,6 +34,7 @@
 
 <body>
   <h1>会議中</h1>
+  <div th:if="${suspicious}">疑わしい人は[[${suspicious.pname}]]です</div>
   <div id="result"></div>
 </body>
 

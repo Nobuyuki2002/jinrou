@@ -46,6 +46,8 @@ public class JinrouController {
   int killMaxIndex = -1;
   Boolean killFlag = true;
 
+  int jobMaxIndex = -1;
+
   @GetMapping("/")
   public String jinrou(ModelMap model, Principal prin) {
     Users tmp = null;
@@ -201,6 +203,28 @@ public class JinrouController {
       return "death.html";
     }
 
+    // 疑わしい人が決まっていない場合に処理
+    if (jobMaxIndex < 0) {
+      ArrayList<Users> users = usersMapper.selectAliveUsers(room.getRoomId());
+      int[] vote = new int[15];
+
+      for (Users user : users) {
+        vote[user.getJobVote() - 1]++;
+      }
+
+      int max = vote[0];
+      jobMaxIndex = 0;
+      for (int i = 1; i < vote.length; i++) {
+        if (max <= vote[i]) {
+          jobMaxIndex = i;
+          max = vote[i];
+        }
+      }
+    }
+
+    Users suspicious = usersMapper.selectById(jobMaxIndex + 1);
+    model.addAttribute("suspicious", suspicious);
+
     model.addAttribute("roomId", loginUser.getRoom());
     return "disc.html";
   }
@@ -234,6 +258,7 @@ public class JinrouController {
       for (Users user : users) {
         vote[user.getKillVote() - 1]++;
       }
+
       int max = vote[0];
       killMaxIndex = 0;
       killFlag = true;
@@ -244,6 +269,10 @@ public class JinrouController {
         } else if (max == vote[i]) {
           killFlag = false;
           break;
+          // if (max != 0) {
+          // killFlag = false;
+          // break;
+          // }
         }
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
