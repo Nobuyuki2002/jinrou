@@ -1,14 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <title>チームおおうち|Jinrou</title>
+
+  <style type="text/css" media="screen, print">
+    @font-face {
+      font-family: "Amatic SC";
+      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
+    }
+
+    body {
+      font-family: "Amatic SC", cursive
+    }
+  </style>
+
 </head>
 
-<body>
-  <h1>終了</h1>
-  <div th:if="${winner}">[[${winner}]]の勝利</div>
-  <div><a href=" /logout">ログアウト</a></div>
-</body>
+<div th:if="${winner=='人狼陣営'}">
+
+  <body bgcolor="black" text="red">
+    <h1>終了</h1>
+    <div th:if="${winner}">[[${winner}]]の勝利</div>
+    <div><a href=" /logout">ログアウト</a></div>
+  </body>
+</div>
+
+<div th:if="${winner=='村人陣営'}">
+
+  <body>
+    <h1>終了</h1>
+    <div th:if="${winner}">[[${winner}]]の勝利</div>
+    <div><a href=" /logout">ログアウト</a></div>
+  </body>
+</div>
 
 </html>
