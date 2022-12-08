@@ -67,7 +67,7 @@ public class JinrouController {
 
   @PostMapping("make")
   @Transactional
-  public String make(@RequestParam String roomName, @RequestParam int roomPass, ModelMap model, Principal prin) {
+  public String make(@RequestParam String roomName, @RequestParam String roomPass, ModelMap model, Principal prin) {
     Rooms room = new Rooms(1, roomName, roomPass);
     Users user = usersMapper.selectByName(prin.getName());
 
@@ -86,11 +86,11 @@ public class JinrouController {
 
   @PostMapping("join")
   @Transactional
-  public String join(@RequestParam String roomName, @RequestParam int roomPass, ModelMap model, Principal prin) {
+  public String join(@RequestParam String roomName, @RequestParam String roomPass, ModelMap model, Principal prin) {
     Rooms room;
     Users user = usersMapper.selectByName(prin.getName());
 
-    if ((room = roomsMapper.selectByName(roomName)) == null || room.getRoomPass() != roomPass) {
+    if ((room = roomsMapper.selectByName(roomName)) == null || !roomPass.equals(room.getRoomPass())) {
       return "matching.html";
     }
 
