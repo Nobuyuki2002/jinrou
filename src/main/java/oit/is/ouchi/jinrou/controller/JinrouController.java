@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,11 @@ import oit.is.ouchi.jinrou.model.UsersMapper;
 import oit.is.ouchi.jinrou.service.AsyncEntry;
 import oit.is.ouchi.jinrou.service.AsyncGameThread;
 import oit.is.ouchi.jinrou.model.Count;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Base64;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/jinrou")
@@ -128,7 +134,7 @@ public class JinrouController {
 
   @GetMapping("match")
   @Transactional
-  public String match(@RequestParam Integer roomId, Principal prin, ModelMap model) {
+  public String match(@RequestParam Integer roomId, Principal prin, ModelMap model, Model models) {
     Users user;
     ArrayList<Users> users;
     Rooms room = roomsMapper.selectById(roomId);
@@ -150,7 +156,16 @@ public class JinrouController {
     }
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
-      return "death.html";
+      File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/death.jpg");
+      try {
+        byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+        String base64Data = Base64.getEncoder().encodeToString(byteImg);
+        models.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
+        return "death.html";
+      } catch (IOException e) {
+        e.printStackTrace();
+        return "death.html";
+      }
     }
 
     roles = rolesMapper.selectRoles(user.getRoles());

@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <title>チームおおうち|Jinrou</title>
+  <style type="text/css" media="screen, print">
+    @font-face {
+      font-family: "Amatic SC";
+      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
+    }
+
+    body {
+      font-family: "Amatic SC", cursive
+    }
+  </style>
 </head>
 
-<body>
+<body bgcolor="black" text="red">
   <h1>あなたは死にました</h1>
   <div><a href="/logout">ログアウト</a></div>
+  <div style="text-align: center">
+    <img th:src="${base64Data}">
+  </div>
 </body>
 
 </html>
