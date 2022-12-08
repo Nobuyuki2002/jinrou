@@ -3,7 +3,7 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
-  <script>
+  <script th:inline="javascript">
     var sse;
     var interval_id = null;
     window.addEventListener('DOMContentLoaded', function () {
@@ -15,9 +15,11 @@
           var resultData = JSON.parse(event.data);
           var result = "";
           resultData.forEach(data => {
-            result += "<div th:if=\"${roomId}\"==" + data.roomId + ">";
-            result += "<a href =\" /jinrou/result?roomId=" + data.roomId + "\">投票結果を見る</a>";
-            result += "</div>";
+            if ([[${ roomId }]] == data.roomId) {
+              result += "<div>";
+              result += "<a href =\" /jinrou/result?roomId=" + data.roomId + "\">投票結果を見る</a>";
+              result += "</div>";
+            }
           });
           console.log(result);
           var div = document.getElementById("result");
