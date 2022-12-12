@@ -176,6 +176,14 @@ public class JinrouController {
     if ((-1) * room.getRoopCount() >= 1) {
       model.addAttribute("roopCount", room.getRoopCount() * (-1));
     }
+    // File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/wolf.jpg");
+    // try {
+    //   byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+    //   String base64Data = Base64.getEncoder().encodeToString(byteImg);
+    //   models.addAttribute("base64DataWolf", "data:image/jpg;base64," + base64Data);
+    // } catch (IOException e) {
+    //   e.printStackTrace();
+    // }
     return "match.html";
   }
 
