@@ -260,7 +260,7 @@ public class JinrouController {
   }
 
   @GetMapping("result")
-  public String result(@RequestParam Integer roomId, Principal prin, ModelMap model) {
+  public String result(@RequestParam Integer roomId, Principal prin, ModelMap model, Model models) {
     Users loginUser = usersMapper.selectByName(prin.getName());
     loginUser.setJobVote(-1);
     usersMapper.updateJobVote(loginUser);
@@ -300,6 +300,18 @@ public class JinrouController {
     }
     // 死ぬ人を決める処理
     model.addAttribute("roomId", roomId);
+
+    if (killFlag) {
+      File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/rope.png");
+      try {
+        byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+        String base64Data = Base64.getEncoder().encodeToString(byteImg);
+        models.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
     return "result.html";
   }
 
