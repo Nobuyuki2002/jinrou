@@ -3,14 +3,28 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
+  <style type="text/css" media="screen, print">
+    @font-face {
+      font-family: "M PLUS Rounded 1c";
+      src: url("https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c");
+    }
+
+    body {
+      font-family: "Amatic SC", cursive
+    }
+  </style>
+
 </head>
 
-<body>
+<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
   <div th:if="${death}">
     <h1>投票の結果[[${death.pname}]]を処刑します。</h1>
   </div>
   <div th:unless="${death}">
     <h1>投票数が引き分けたため、処刑を行いません。</h1>
+  </div>
+  <div style="text-align: center">
+    <img th:src="${base64Data}">
   </div>
   <div th:if="${roomId}">
     <sapn><a th:href="@{/jinrou/match(roomId=${roomId})}">次の日へ</a></sapn>
