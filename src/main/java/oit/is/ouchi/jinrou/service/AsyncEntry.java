@@ -23,7 +23,6 @@ import oit.is.ouchi.jinrou.model.UsersMapper;
 public class AsyncEntry {
   boolean dbUpdated = false;
   // int id;
-  int startCount = 0;
 
   private final Logger logger = LoggerFactory.getLogger(AsyncEntry.class);
 
@@ -35,10 +34,6 @@ public class AsyncEntry {
 
   @Autowired
   RoomsMapper roomsMapper;
-
-  public void setStartCount(int count) {
-    this.startCount = count;
-  }
 
   @Async
   public void syncCheckEntry(SseEmitter emitter) {
@@ -59,6 +54,7 @@ public class AsyncEntry {
         startRoomCount = roomsMapper.selectStartRoomCount(i);
         // ルーム人数取得
         countPlayer = usersMapper.selectCountByRoomId(i);
+        ArrayList<Users> roomUsers = usersMapper.selectByRoomId(i);
         // ルーム人数制限以上である場合
         if (startRoomCount.getCount() <= countPlayer.getCount()) {
           room = roomsMapper.selectById(i);
@@ -67,11 +63,11 @@ public class AsyncEntry {
           int wolfNum = room.getWolfNum();
           if (wolfNum == 0) {
             wolfNum = (int) (Math.random() * countRoomMember.getCount()) + 1;
-            room.setWolfNum(wolfNum);
+            room.setWolfNum(roomUsers.get(wolfNum).getId());
             roomsMapper.updateWolfNum(room);
             ArrayList<Users> roomMember = usersMapper.selectByRoomId(i);
             for (Users tmp : roomMember) {
-              if (wolfNum == tmp.getId()) {
+              if (room.getWolfNum() == tmp.getId()) {
                 tmp.setRoles(2);
               } else {
                 tmp.setRoles(1);
