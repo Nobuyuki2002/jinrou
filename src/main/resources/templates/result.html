@@ -24,7 +24,7 @@
     <h1>投票数が引き分けたため、処刑を行いません。</h1>
   </div>
   <div style="text-align: center">
-    <img th:src="${base64Data}">
+    <img th:src="${ropeImg}">
   </div>
   <div th:if="${roomId}">
     <sapn><a th:href="@{/jinrou/match(roomId=${roomId})}">次の日へ</a></sapn>
