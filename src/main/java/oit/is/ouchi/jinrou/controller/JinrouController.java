@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Select;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -157,8 +156,16 @@ public class JinrouController {
     }
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
-      this.ImageView("death.jpg", models, "deathImg");
-      return "death.html";
+      File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/death.jpg");
+      try {
+        byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+        String base64Data = Base64.getEncoder().encodeToString(byteImg);
+        models.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
+        return "death.html";
+      } catch (IOException e) {
+        e.printStackTrace();
+        return "death.html";
+      }
     }
 
     roles = rolesMapper.selectRoles(user.getRoles());
@@ -169,10 +176,14 @@ public class JinrouController {
     if ((-1) * room.getRoopCount() >= 1) {
       model.addAttribute("roopCount", room.getRoopCount() * (-1));
     }
-
-    // TODO:役職ごとに画像を変える
-    this.ImageView("wolf.jpg", models, "wolfImg");
-
+    File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/wolf.jpg");
+    try {
+      byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+      String base64Data = Base64.getEncoder().encodeToString(byteImg);
+      models.addAttribute("base64DataWolf", "data:image/jpg;base64," + base64Data);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     return "match.html";
   }
 
@@ -279,10 +290,12 @@ public class JinrouController {
           killMaxIndex = i;
           max = vote[i];
         } else if (max == vote[i]) {
-          if (max != 0) {
-            killFlag = false;
-            break;
-          }
+          killFlag = false;
+          break;
+          // if (max != 0) {
+          // killFlag = false;
+          // break;
+          // }
         }
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
@@ -297,7 +310,14 @@ public class JinrouController {
     model.addAttribute("roomId", roomId);
 
     if (killFlag) {
-      this.ImageView("rope.png", models, "ropeImg");
+      File fileImg = new File("./src/main/java/oit/is/ouchi/jinrou/img/rope.png");
+      try {
+        byte[] byteImg = Files.readAllBytes(fileImg.toPath());
+        String base64Data = Base64.getEncoder().encodeToString(byteImg);
+        models.addAttribute("base64Data", "data:image/jpg;base64," + base64Data);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
     return "result.html";
@@ -329,18 +349,5 @@ public class JinrouController {
     final SseEmitter sseEmitter = new SseEmitter();
     this.gameService.syncCheckKillVote(sseEmitter);
     return sseEmitter;
-  }
-
-  public void ImageView(String imageFile, Model model, String bookName) {
-    final String imgPath = "./src/main/java/oit/is/ouchi/jinrou/img/";
-    File file = new File(imgPath + imageFile);
-
-    try {
-      byte[] imageByte = Files.readAllBytes(file.toPath());
-      String base64Data = Base64.getEncoder().encodeToString(imageByte);
-      model.addAttribute(bookName, "data:image/jpg;base64," + base64Data);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 }
