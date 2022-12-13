@@ -290,12 +290,10 @@ public class JinrouController {
           killMaxIndex = i;
           max = vote[i];
         } else if (max == vote[i]) {
-          killFlag = false;
-          break;
-          // if (max != 0) {
-          // killFlag = false;
-          // break;
-          // }
+          if (max != 0) {
+            killFlag = false;
+            break;
+          }
         }
       }
       // 人狼の数と村人の数を比べてゲームの終了を判定する
