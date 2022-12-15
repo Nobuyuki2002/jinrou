@@ -2,6 +2,7 @@ package oit.is.ouchi.jinrou.model;
 
 import java.util.ArrayList;
 
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -63,4 +64,10 @@ public interface UsersMapper {
 
   @Update("UPDATE users set lname = NULL WHERE id = #{id};")
   void updateLnameByName(Users user);
+
+  @Select("SELECT COUNT(*) as count FROM users WHERE jobVote = #{id} and isDeath = FALSE;")
+  Count selectJobVoteCountById(Users user);
+
+  @Select("SELECT COUNT(*) as count FROM users WHERE killVote = #{id} and isDeath = FALSE;")
+  Count selectKillVoteCountById(Users user);
 }

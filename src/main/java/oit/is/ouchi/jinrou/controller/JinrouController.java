@@ -22,6 +22,7 @@ import oit.is.ouchi.jinrou.model.Rooms;
 import oit.is.ouchi.jinrou.model.RoomsMapper;
 import oit.is.ouchi.jinrou.model.Users;
 import oit.is.ouchi.jinrou.model.UsersMapper;
+import oit.is.ouchi.jinrou.model.Vote;
 import oit.is.ouchi.jinrou.service.AsyncEntry;
 import oit.is.ouchi.jinrou.service.AsyncGameThread;
 import oit.is.ouchi.jinrou.model.Count;
@@ -50,10 +51,12 @@ public class JinrouController {
   @Autowired
   AsyncGameThread gameService;
 
-  int killMaxIndex = -1;
-  Boolean killFlag = true;
+  ArrayList<Vote> voteManage = new ArrayList<Vote>();
 
-  int jobMaxIndex = -1;
+  // int killMaxIndex = -1;
+  // Boolean killFlag = true;
+
+  // int jobMaxIndex = -1;
 
   @GetMapping("/")
   public String jinrou(ModelMap model, Principal prin) {
@@ -82,11 +85,11 @@ public class JinrouController {
 
     if ((roomsMapper.selectByName(roomName)) == null) {
       roomsMapper.insertRooms(room);
+      voteManage.add(new Vote());
       room = roomsMapper.selectByName(roomName);
       user.setRoom(room.getRoomId());
       usersMapper.updateRoomId(user);
       model.addAttribute("roomId", room.getRoomId());
-      System.out.println(room.getRoomId());
       model.addAttribute("userName", user.getPname());
       return "gameWait.html";
     }
@@ -158,6 +161,7 @@ public class JinrouController {
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
       this.ImageView("death.jpg", models, "deathImg");
+      usersMapper.updateLnameByName(user);
       return "death.html";
     }
 
@@ -212,29 +216,30 @@ public class JinrouController {
       return "close.html";
     }
     if (loginUser.isDeath()) {
+      usersMapper.updateLnameByName(loginUser);
       return "death.html";
     }
 
+    ArrayList<Users> users = usersMapper.selectAliveUsers(room.getRoomId());
+    // Vote vote = this.voteManage.get(room.getRoomId() - 1);
+    // ほぼ同時の接続などのリアルタイム性のため、this.voteManage.getを使っている
+    Count count;
     // 疑わしい人が決まっていない場合に処理
-    if (jobMaxIndex < 0) {
-      ArrayList<Users> users = usersMapper.selectAliveUsers(room.getRoomId());
-      int[] vote = new int[15];
-
-      for (Users user : users) {
-        vote[user.getJobVote() - 1]++;
-      }
-
-      int max = vote[0];
-      jobMaxIndex = 0;
-      for (int i = 1; i < vote.length; i++) {
-        if (max <= vote[i]) {
-          jobMaxIndex = i;
-          max = vote[i];
+    if (this.voteManage.get(room.getRoomId() - 1).getJobMaxIndex() < 0) {
+      Count max = usersMapper.selectJobVoteCountById(users.get(0));
+      this.voteManage.get(room.getRoomId() - 1).setJobMaxIndex(0);
+      for (int i = 1; i < users.size(); i++) {
+        count = usersMapper.selectJobVoteCountById(users.get(i));
+        if (max.getCount() <= count.getCount()) {
+          this.voteManage.get(room.getRoomId() - 1).setJobMaxIndex(i);
+          max.setCount(count.getCount());
         }
       }
+      int index = this.voteManage.get(room.getRoomId() - 1).getJobMaxIndex();
+      this.voteManage.get(room.getRoomId() - 1).setJobVoteUserId(users.get(index).getId());
     }
 
-    Users suspicious = usersMapper.selectById(jobMaxIndex + 1);
+    Users suspicious = usersMapper.selectById(this.voteManage.get(room.getRoomId() - 1).getJobVoteUserId());
     model.addAttribute("suspicious", suspicious);
 
     model.addAttribute("roomId", loginUser.getRoom());
@@ -248,7 +253,7 @@ public class JinrouController {
     usersMapper.updateKillVote(loginUser);
     model.addAttribute("roomId", loginUser.getRoom());
     Rooms room = roomsMapper.selectById(loginUser.getRoom());
-    killMaxIndex = -1;
+    this.voteManage.get(room.getRoomId() - 1).setKillMaxIndex(-1);
     if (room.getRoopCount() >= 0) {
       room.setRoopCount(room.getRoopCount() * -1);
       roomsMapper.updateRoopCount(room);
@@ -262,43 +267,40 @@ public class JinrouController {
     loginUser.setJobVote(-1);
     usersMapper.updateJobVote(loginUser);
 
+    // Vote vote = this.voteManage.get(roomId - 1);
+    ArrayList<Users> users = usersMapper.selectAliveUsers(roomId);
+    Count count;
     // 死ぬ人が決まっていない場合に処理
-    if (killMaxIndex < 0) {
-      ArrayList<Users> users = usersMapper.selectAliveUsers(roomId);
-      int[] vote = new int[10];
+    if (this.voteManage.get(roomId - 1).getKillMaxIndex() < 0) {
 
-      for (Users user : users) {
-        vote[user.getKillVote() - 1]++;
-      }
-
-      int max = vote[0];
-      killMaxIndex = 0;
-      killFlag = true;
-      for (int i = 1; i < vote.length; i++) {
-        if (max < vote[i]) {
-          killMaxIndex = i;
-          max = vote[i];
-        } else if (max == vote[i]) {
-          if (max != 0) {
-            killFlag = false;
+      Count max = usersMapper.selectKillVoteCountById(users.get(0));
+      this.voteManage.get(roomId - 1).setKillMaxIndex(0);
+      this.voteManage.get(roomId - 1).setKillFlag(true);
+      for (int i = 1; i < users.size(); i++) {
+        count = usersMapper.selectKillVoteCountById(users.get(i));
+        if (max.getCount() < count.getCount()) {
+          this.voteManage.get(roomId - 1).setKillMaxIndex(i);
+          max.setCount(count.getCount());
+        } else if (max.getCount() == count.getCount()) {
+          if (max.getCount() != 0) {
+            this.voteManage.get(roomId - 1).setKillFlag(false);
             break;
           }
         }
       }
+      int index = this.voteManage.get(roomId - 1).getKillMaxIndex();
+      this.voteManage.get(roomId - 1).setKillVoteUserId(users.get(index).getId());
       // 人狼の数と村人の数を比べてゲームの終了を判定する
     }
-    if (killFlag) {
-      Users deathUser = usersMapper.selectById(killMaxIndex + 1);
+    if (this.voteManage.get(roomId - 1).getKillFlag()) {
+      Users deathUser = usersMapper.selectById(this.voteManage.get(roomId - 1).getKillVoteUserId());
       model.addAttribute("death", deathUser);
       deathUser.setDeath(true);
       usersMapper.updateDeath(deathUser);
+      this.ImageView("rope.png", models, "ropeImg");
     }
     // 死ぬ人を決める処理
     model.addAttribute("roomId", roomId);
-
-    if (killFlag) {
-      this.ImageView("rope.png", models, "ropeImg");
-    }
 
     return "result.html";
   }
