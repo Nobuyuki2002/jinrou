@@ -62,12 +62,11 @@ public class AsyncEntry {
           Count countRoomMember = usersMapper.selectCountByRoomId(i);
           int wolfNum = room.getWolfNum();
           if (wolfNum == 0) {
-            wolfNum = (int) (Math.random() * countRoomMember.getCount()) + 1;
+            wolfNum = (int) (Math.random() * countRoomMember.getCount());
             room.setWolfNum(roomUsers.get(wolfNum).getId());
             roomsMapper.updateWolfNum(room);
-            ArrayList<Users> roomMember = usersMapper.selectByRoomId(i);
-            for (Users tmp : roomMember) {
-              if (wolfNum == tmp.getId()) {
+            for (Users tmp : roomUsers) {
+              if (roomUsers.get(wolfNum).equals(tmp)) {
                 tmp.setRoles(2);
               } else {
                 tmp.setRoles(1);
