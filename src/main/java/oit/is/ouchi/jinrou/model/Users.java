@@ -7,6 +7,7 @@ public class Users {
   int room;
   int roles;
   boolean isDeath;
+  boolean isDivined;
   int jobVote;
   int killVote;
 
@@ -18,6 +19,7 @@ public class Users {
     this.pname = pname;
     this.room = room;
     this.isDeath = false;
+    this.isDivined = false;
     this.roles = roles;
     this.jobVote = -1;
     this.killVote = -1;
@@ -61,6 +63,14 @@ public class Users {
 
   public void setRoles(int roles) {
     this.roles = roles;
+  }
+
+  public boolean isDivined() {
+    return isDivined;
+  }
+
+  public void setDivined(boolean isDivined) {
+    this.isDivined = isDivined;
   }
 
   public boolean isDeath() {

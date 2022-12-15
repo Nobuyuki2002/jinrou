@@ -243,6 +243,15 @@ public class JinrouController {
     model.addAttribute("suspicious", suspicious);
 
     model.addAttribute("roomId", loginUser.getRoom());
+
+    ArrayList<Users> divinedUser = usersMapper.selectByDivinedUsers();
+    model.addAttribute("divinedUser", divinedUser);
+
+    Roles roles;
+
+    roles = rolesMapper.selectRoles(loginUser.getRoles());
+    model.addAttribute("roles", roles);
+
     return "disc.html";
   }
 
