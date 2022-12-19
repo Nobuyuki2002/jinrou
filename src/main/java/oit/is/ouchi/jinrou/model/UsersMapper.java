@@ -17,8 +17,8 @@ public interface UsersMapper {
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
   void insertUsers(Users user);
 
-  @Select("select * from users where isDivined = true")
-  ArrayList<Users> selectByDivinedUsers();
+  @Select("select * from users where isDivined = true and room = #{room}")
+  ArrayList<Users> selectByDivinedUsers(int room);
 
   @Select("select * from users where lname = #{lname}")
   Users selectByName(String lname);

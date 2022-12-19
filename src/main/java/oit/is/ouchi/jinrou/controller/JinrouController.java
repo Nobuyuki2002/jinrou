@@ -244,7 +244,7 @@ public class JinrouController {
 
     model.addAttribute("roomId", loginUser.getRoom());
 
-    ArrayList<Users> divinedUser = usersMapper.selectByDivinedUsers();
+    ArrayList<Users> divinedUser = usersMapper.selectByDivinedUsers(loginUser.getRoom());
     model.addAttribute("divinedUser", divinedUser);
 
     Roles roles;
