@@ -10,11 +10,14 @@
       src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
     }
 
+    html,
     body {
-      font-family: "Amatic SC", cursive
+      font-family: "Amatic SC", cursive;
+      height: 100%;
+      background: linear-gradient(#000040, #000040 60%, rgb(244, 105, 5));
     }
   </style>
-  
+
   <script th:inline="javascript">
     var sse;
     var interval_id = null;
@@ -46,7 +49,7 @@
 </head>
 
 <body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-  <h1>夜になるのを待っています</h1>
+  <h1>朝が来るのを待っています</h1>
   <div id="result"></div>
 </body>
 
