@@ -161,7 +161,6 @@ public class JinrouController {
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
       this.ImageView("death.jpg", models, "deathImg");
-      usersMapper.updateLnameByName(user);
       return "death.html";
     }
 
@@ -169,13 +168,24 @@ public class JinrouController {
     model.addAttribute("roomName", room.getRoomName());
     model.addAttribute("roles", roles);
     users = usersMapper.selectAliveUsers(roomId);
+    Users loginUser = usersMapper.selectByName(prin.getName());
     model.addAttribute("users", users);
     if ((-1) * room.getRoopCount() >= 1) {
       model.addAttribute("roopCount", room.getRoopCount() * (-1));
     }
 
     // TODO:役職ごとに画像を変える
-    this.ImageView("wolf.jpg", models, "wolfImg");
+    switch (loginUser.getRoles()) {
+      case 1:
+        this.ImageView("man.png", models, "manImg");
+        break;
+      case 2:
+        this.ImageView("wolf.jpg", models, "wolfImg");
+        break;
+      case 4:
+        this.ImageView("fortune.png", models, "fortuneImg");
+        break;
+    }
 
     return "match.html";
   }
