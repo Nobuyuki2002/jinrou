@@ -24,6 +24,9 @@
     <div style="text-align: center">
       <img th:src="${wolfImg}">
     </div>
+    <div th:if="${roles.rolId}==4">
+      <span>占いたい人に投票しましょう。</span>
+    </div>
     <div th:if="${roles.rolId}==2">
       <span th:if="${roopCount} == 1">疑わしい人に投票しましょう。</span>
       <span th:if="${roopCount} >= 2">殺害する人を決定しましょう。</span>

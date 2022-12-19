@@ -59,6 +59,21 @@ public class AsyncGameThread {
               break;
             }
           }
+          // 占い師が初日以降、誰かを占う
+          for (Users alive : aliveUsersInRoom) {
+            if (alive.getRoles() == 4 && roomsMapper.selectById(i).getRoopCount() > 1) {
+              Users divined = usersMapper.selectById(alive.getJobVote());
+              divined.setDivined(true);
+              usersMapper.updateDivineFlag(divined);
+              break;
+            }
+            if (alive.getRoles() == 4 && roomsMapper.selectById(i).getRoopCount() * (-1) > 1) {
+              Users divined = usersMapper.selectById(alive.getJobVote());
+              divined.setDivined(true);
+              usersMapper.updateDivineFlag(divined);
+              break;
+            }
+          }
           gameJudge(i);
           room = roomsMapper.selectById(i);
           rooms.add(room);
@@ -142,7 +157,7 @@ public class AsyncGameThread {
       return;
     }
     // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
-    if (usersMapper.selectCountByRoleId(roomId, 1, false).getCount() <= 1) {
+    if (usersMapper.selectCountByVillagerId(roomId, 2, false).getCount() <= 1) {
       room.setActive(false);
       room.setRoopCount(-1);
       room.setWolfNum(0);

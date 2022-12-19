@@ -13,9 +13,12 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface UsersMapper {
 
-  @Insert("INSERT INTO users (lname,pname,room,roles,isDeath,jobVote,killVote) VALUES (#{lname},#{pname},#{room},#{roles},#{isDeath},#{jobVote},#{killVote});")
+  @Insert("INSERT INTO users (lname,pname,room,roles,isDeath,isDivined,jobVote,killVote) VALUES (#{lname},#{pname},#{room},#{roles},#{isDeath},#{isDivined},#{jobVote},#{killVote});")
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
   void insertUsers(Users user);
+
+  @Select("select * from users where isDivined = true and room = #{room}")
+  ArrayList<Users> selectByDivinedUsers(int room);
 
   @Select("select * from users where lname = #{lname}")
   Users selectByName(String lname);
@@ -47,6 +50,9 @@ public interface UsersMapper {
   @Update("UPDATE users SET isDeath = #{isDeath} WHERE id = #{id};")
   void updateDeath(Users user);
 
+  @Update("UPDATE users SET isDivined = #{isDivined} WHERE id = #{id};")
+  void updateDivineFlag(Users user);
+
   @Update("UPDATE users SET room = #{room} WHERE id = #{id};")
   void updateRoomId(Users user);
 
@@ -58,6 +64,9 @@ public interface UsersMapper {
 
   @Select("SELECT COUNT(*) as count FROM users WHERE room = #{room} and roles = #{roles} and isDeath = #{isDeath};")
   Count selectCountByRoleId(int room, int roles, boolean isDeath);
+
+  @Select("SELECT COUNT(*) as count FROM users WHERE room = #{room} and roles != #{roles} and isDeath = #{isDeath};")
+  Count selectCountByVillagerId(int room, int roles, boolean isDeath);
 
   @Delete("DELETE FROM users WHERE room = #{room};")
   void deleteUsersByRoom(int room);

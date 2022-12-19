@@ -74,6 +74,20 @@ public class AsyncEntry {
               usersMapper.updateRole(tmp);
             }
           }
+          int divinerNum = room.getDivinerNum();
+          if (divinerNum == 0) {
+            while (divinerNum == wolfNum || divinerNum == 0) {
+              divinerNum = (int) (Math.random() * countRoomMember.getCount());
+            }
+            room.setDivinerNum(roomUsers.get(divinerNum).getId());
+            roomsMapper.updateDivinerNum(room);
+            for (Users tmp : roomUsers) {
+              if (roomUsers.get(divinerNum).equals(tmp)) {
+                tmp.setRoles(4);
+                usersMapper.updateRole(tmp);
+              }
+            }
+          }
         }
         i++;
       }

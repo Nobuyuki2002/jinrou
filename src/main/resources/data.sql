@@ -9,3 +9,4 @@ INSERT INTO settings ( startCount ) VALUES (4);
 INSERT INTO roles ( rolName, isVillager ) VALUES ( 'VILLAGER', 1 );
 INSERT INTO roles ( rolName, isVillager ) VALUES ( 'WOLF', 2 );
 INSERT INTO roles ( rolName, isVillager ) VALUES ( 'USER', 0 );
+INSERT INTO roles ( rolName, isVillager ) VALUES ( 'DIVINER', 4 );
