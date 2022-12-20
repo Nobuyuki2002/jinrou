@@ -25,9 +25,9 @@
   <div th:if="${roles}">
     <h1>あなたの役割は"[[${roles.rolName}]]"</h1>
     <div style="text-align: center">
-      <img th:src="${wolfImg}">
-      <img th:src="${manImg}">
-      <img th:src="${fortuneImg}">
+      <img th:src="${wolfImg}" align="left">
+      <img th:src="${manImg}" align="left">
+      <img th:src="${fortuneImg}" align="left">
     </div>
     <div th:if="${roles.rolId}==4">
       <span>占いたい人に投票しましょう。</span>
