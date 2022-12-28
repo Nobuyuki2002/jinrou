@@ -32,3 +32,13 @@ CREATE TABLE settings (
     settingId IDENTITY,
     startCount INT NOT NULL
 );
+
+/**
+ * Spring security user table
+***/
+CREATE TABLE loginUsers (
+  userId IDENTITY,
+  username VARCHAR NOT NULL,
+  passwd VARCHAR NOT NULL,
+  authorities VARCHAR
+);

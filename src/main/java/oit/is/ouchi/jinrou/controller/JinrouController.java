@@ -3,8 +3,6 @@ package oit.is.ouchi.jinrou.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 
-import org.apache.ibatis.annotations.Select;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
