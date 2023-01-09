@@ -1,6 +1,15 @@
 -- INSERT INTO rooms (settingId, roomName, roomPass, roopCount,wolfNum, winner, isActive) VALUES (1, 'PUBLIC', 123, -1, 0, 0, true);
 
 INSERT INTO settings ( startCount ) VALUES (4);
+INSERT INTO settings ( startCount ) VALUES (5);
+INSERT INTO settings ( startCount ) VALUES (6);
+INSERT INTO settings ( startCount ) VALUES (7);
+INSERT INTO settings ( startCount ) VALUES (8);
+INSERT INTO settings ( startCount ) VALUES (9);
+INSERT INTO settings ( startCount ) VALUES (10);
+INSERT INTO settings ( startCount ) VALUES (11);
+INSERT INTO settings ( startCount ) VALUES (12);
+
 -- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
 -- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
 -- INSERT INTO users (room,pname,roles,isdeath) VALUES (1,NULL,1,true);
