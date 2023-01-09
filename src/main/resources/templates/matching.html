@@ -23,16 +23,17 @@
   <form th:action="@{/jinrou/make}" method="post">
     ルーム名<input type="text" name="roomName" />
     パスワード<input type="text" name="roomPass" />
+    人数<input type="number" name="startCount" />
     <input type="submit" value="作成">
   </form>
   </P>
   <p>
     ルーム参加
-    <form th:action="@{/jinrou/join}"method="post">
-      ルーム名<input type="text" name="roomName" />
-      パスワード<input type="text" name="roomPass" />
-      <input type="submit" value="参加">
-    </form>
+  <form th:action="@{/jinrou/join}" method="post">
+    ルーム名<input type="text" name="roomName" />
+    パスワード<input type="text" name="roomPass" />
+    <input type="submit" value="参加">
+  </form>
   </p>
 </body>
 

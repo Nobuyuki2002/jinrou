@@ -3,6 +3,8 @@ package oit.is.ouchi.jinrou.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Select;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,8 +79,9 @@ public class JinrouController {
 
   @PostMapping("make")
   @Transactional
-  public String make(@RequestParam String roomName, @RequestParam String roomPass, ModelMap model, Principal prin) {
-    Rooms room = new Rooms(1, roomName, roomPass);
+  public String make(@RequestParam String roomName, @RequestParam String roomPass, @RequestParam int startCount,
+      ModelMap model, Principal prin) {
+    Rooms room = new Rooms(startCount - 3, roomName, roomPass);
     Users user = usersMapper.selectByName(prin.getName());
 
     if ((roomsMapper.selectByName(roomName)) == null) {
@@ -102,14 +105,16 @@ public class JinrouController {
 
     if ((room = roomsMapper.selectByName(roomName)) == null || !roomPass.equals(room.getRoomPass())) {
       return "matching.html";
+    } else if ((room = roomsMapper.selectByName(roomName)) != null && roomPass.equals(room.getRoomPass())
+        && room.getSettingId() + 3 == usersMapper.countRoomUsers(room.getRoomId())) {
+      return "matching.html";
+    } else {
+      user.setRoom(room.getRoomId());
+      usersMapper.updateRoomId(user);
+      model.addAttribute("roomId", room.getRoomId());
+      model.addAttribute("userName", user.getPname());
+      return "gameWait.html";
     }
-
-    user.setRoom(room.getRoomId());
-    usersMapper.updateRoomId(user);
-    model.addAttribute("roomId", room.getRoomId());
-    model.addAttribute("userName", user.getPname());
-    return "gameWait.html";
-
   }
 
   @PostMapping("entry")

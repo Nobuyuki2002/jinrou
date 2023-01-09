@@ -26,14 +26,17 @@ public interface UsersMapper {
   @Select("select * from users where id = #{id}")
   Users selectById(int id);
 
-  @Select("select * from users where room = #{room} and isDeath = false")
-  ArrayList<Users> selectAliveUsers(int room);
+  @Select("select COUNT(*) as count from users where room = #{room}")
+  int countRoomUsers(int room);
 
   @Select("SELECT COUNT(room) as count FROM users WHERE room = #{roomId}")
   Count selectCountByRoomId(int roomId);
 
   @Select("SELECT * FROM users;")
   ArrayList<Users> selectAll();
+
+  @Select("select * from users where room = #{room} and isDeath = false")
+  ArrayList<Users> selectAliveUsers(int room);
 
   @Select("SELECT * FROM users WHERE room = #{roomId};")
   ArrayList<Users> selectByRoomId(int roomId);
