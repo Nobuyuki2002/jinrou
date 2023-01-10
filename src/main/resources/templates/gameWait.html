@@ -3,17 +3,7 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    body {
-      font-family: "Amatic SC", cursive
-    }
-  </style>
-  
+  <link rel="stylesheet" href="../css/style.css">
   <script th:inline="javascript">
     var sse;
     var interval_id = null;
@@ -43,11 +33,14 @@
   </script>
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-  <h1>対戦相手を募集中です。少々お待ちください。</h1>
-  <div th:if="${userName}">あなたのユーザ名は[[${userName}]]です。</div>
-  <h2>開始しているゲーム</h2>
-  <div id="result"></div>
+<body class="waitbody" link="#FFFFFF" vlink="#FFB359">
+  <div class="jinrouText">
+    <h1>対戦相手を募集中です。少々お待ちください。</h1>
+    <div th:if="${userName}">あなたのユーザ名は[[${userName}]]です。</div>
+    <h2>開始しているゲーム</h2>
+    <div id="result"></div>
+  </div>
+
 </body>
 
 </html>

@@ -3,28 +3,17 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
-
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    body {
-      font-family: "Amatic SC", cursive
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-  <h1>こんにちは,チーム大内です。</h1>
-  <P>
-    あなたの名前を入力してください
-  <form th:action="@{/jinrou/entry}" method="post">
-    名前<input type="text" name="pname" />
-    <input type="submit" value="エントリー">
-  </form>
-  </P>
+<body class="createbody" link="#FFFFFF" vlink="#FFB359">
+  <div class="jinrouText">
+      あなたの名前を入力してください
+    <form th:action="@{/jinrou/entry}" method="post">
+      名前<input type="text" name="pname" />
+      <input type="submit" value="エントリー">
+    </form>
+  </div>
 </body>
 
 </html>

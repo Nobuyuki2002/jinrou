@@ -1,0 +1,40 @@
+.waitbody{
+    background-image: url("../image/flooryo.jpg");
+    background-size: cover;
+}
+
+.createbody{
+    background-image: url("../image/floorhi.jpg");
+    background-size: cover;
+}
+
+.matchingbody{
+    background-image: url("../image/flooryuu.jpg");
+    background-size: cover;
+}
+
+.registbody{
+    background-image: url("../image/background.jpg");
+    background-size: cover;
+}
+
+.jinrouText{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: -30%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color:white;
+    text-align: center;
+}
+
+
+    @font-face {
+      font-family: "Amatic SC";
+      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
+    }
+
+    body {
+      font-family: "Amatic SC", cursive
+    }
