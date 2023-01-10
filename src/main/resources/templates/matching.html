@@ -3,38 +3,25 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
-
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    body {
-      font-family: "Amatic SC", cursive
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-  <h1>こんにちは,チーム大内です。</h1>
-  <P>
+<body class="matchingbody" link="#FFFFFF" vlink="#FFB359">
+  <div class="jinrouText">
     ルーム作成
-  <form th:action="@{/jinrou/make}" method="post">
-    ルーム名<input type="text" name="roomName" />
-    パスワード<input type="text" name="roomPass" />
-    人数<input type="number" name="startCount" />
-    <input type="submit" value="作成">
-  </form>
-  </P>
-  <p>
-    ルーム参加
-  <form th:action="@{/jinrou/join}" method="post">
-    ルーム名<input type="text" name="roomName" />
-    パスワード<input type="text" name="roomPass" />
-    <input type="submit" value="参加">
-  </form>
-  </p>
+    <form th:action="@{/jinrou/make}" method="post">
+      ルーム名<input type="text" name="roomName" />
+      パスワード<input type="text" name="roomPass" />
+      人数<input type="number" name="startCount" />
+      <input type="submit" value="作成">
+    </form>
+    </br>
+      ルーム参加
+    <form th:action="@{/jinrou/join}" method="post">
+      ルーム名<input type="text" name="roomName" />
+      パスワード<input type="text" name="roomPass" />
+      <input type="submit" value="参加">
+    </form>
+  </div>
 </body>
-
 </html>
