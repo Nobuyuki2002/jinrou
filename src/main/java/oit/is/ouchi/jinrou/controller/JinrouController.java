@@ -183,7 +183,7 @@ public class JinrouController {
         this.ImageView("man.png", models, "manImg");
         break;
       case 2:
-        this.ImageView("wolf.jpg", models, "wolfImg");
+        this.ImageView("wolf.png", models, "wolfImg");
         break;
       case 4:
         this.ImageView("fortune.png", models, "fortuneImg");
