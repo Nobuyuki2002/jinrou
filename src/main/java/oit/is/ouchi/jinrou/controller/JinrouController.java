@@ -163,7 +163,6 @@ public class JinrouController {
     }
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
-      this.ImageView("death.jpg", models, "deathImg");
       return "death.html";
     }
 

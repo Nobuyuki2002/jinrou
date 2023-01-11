@@ -4,58 +4,45 @@
 <head>
   <title>チームおおうち|Jinrou</title>
 
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    html,
-    body {
-      font-family: "Amatic SC", cursive;
-      height: 100%;
-      background: linear-gradient(#000040, #000042)
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-  <div th:if="${roomName}">ようこそ、[[${roomName}]]へ</div>
-  <div th:if="${roopCount}">[[${roopCount}]]日目</div>
-  <div th:if="${roles}">
-    <h1 style="text-align: center">あなたの役割は"[[${roles.rolName}]]"</h1>
-    <div style="text-align: center">
-      <img th:src="${wolfImg}" align="left">
-      <img th:src="${manImg}" align="left">
-      <img th:src="${fortuneImg}" align="left">
+<body class="yoru" text="white" link="#FFFFFF" vlink="#FFB359">
+  <div class="jinrouText">
+    <div th:if="${roomName}">ようこそ、[[${roomName}]]へ</div>
+    <div th:if="${roopCount}">[[${roopCount}]]日目</div>
+    <div th:if="${roles}">
+      <h1 style="text-align: center">あなたの役割は"[[${roles.rolName}]]"</h1>
+      <div th:if="${roles.rolId}==4">
+        占いたい人に投票しましょう。
+      </div>
+      <div style="text-align: center" th:if="${roles.rolId}==2">
+        <div th:if="${roopCount} == 1">疑わしい人に投票しましょう。</div>
+        <div th:if="${roopCount} >= 2">殺害する人を決定しましょう。</div>
+      </div>
+      <div th:if="${roles.rolId}==1">
+        疑わしい人に投票しましょう。
+      </div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <img th:src="${wolfImg}">
+        <img th:src="${manImg}">
+        <img th:src="${fortuneImg}">
+        <table border="1">
+          <thead>
+            <th>名前</th>
+            <th>投票</th>
+          </thead>
+          <tbody>
+            <span th:if="${users}">
+              <tr th:each="user,stat:${users}">
+                <td>[[${user.pname}]]</td>
+                <td><a th:href="@{/jinrou/job(id=${user.id})}">投票</a></td>
+              </tr>
+            </span>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div th:if="${roles.rolId}==4">
-      <span>占いたい人に投票しましょう。</span>
-    </div>
-    <div style="text-align: center" th:if="${roles.rolId}==2">
-      <span th:if="${roopCount} == 1">疑わしい人に投票しましょう。</span>
-      <span th:if="${roopCount} >= 2">殺害する人を決定しましょう。</span>
-    </div>
-    <div th:if="${roles.rolId}==1">
-      <span>疑わしい人に投票しましょう。</span>
-    </div>
-  </div>
-
-  <div>
-    <table border="1">
-      <thead>
-        <th>名前</th>
-        <th>投票</th>
-      </thead>
-      <tbody>
-        <span th:if="${users}">
-          <tr th:each="user,stat:${users}">
-            <td>[[${user.pname}]]</td>
-            <td><a th:href="@{/jinrou/job(id=${user.id})}">投票</a></td>
-          </tr>
-        </span>
-      </tbody>
-    </table>
   </div>
 </body>
 

@@ -4,19 +4,7 @@
 <head>
   <title>チームおおうち|Jinrou</title>
 
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    html,
-    body {
-      font-family: "Amatic SC", cursive;
-      height: 100%;
-      background: linear-gradient(#9bcecf, rgb(255, 173, 114));
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 
   <script th:inline="javascript">
     var sse;
@@ -46,9 +34,11 @@
   </script>
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#700000">
-  <h1>投票中です。少々お待ちください。</h1>
-  <div id="result"></div>
+<body class="yuu" link="#FFFFFF" vlink="#700000">
+  <div class="jinrouText">
+    <h1>投票中です。少々お待ちください。</h1>
+    <div id="result"></div>
+  </div>
 </body>
 
 </html>

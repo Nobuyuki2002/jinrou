@@ -4,19 +4,7 @@
 <head>
   <title>チームおおうち|Jinrou</title>
 
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "Amatic SC";
-      src: url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
-    }
-
-    html,
-    body {
-      font-family: "Amatic SC", cursive;
-      height: 100%;
-      background: linear-gradient(#8dbabc, rgb(255, 255, 255));
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 
   <script th:inline="javascript">
     var sse;
@@ -47,31 +35,36 @@
   </script>
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#700000">
-  <h1>会議中</h1>
-  <div th:if="${suspicious}">疑わしい人は[[${suspicious.pname}]]です</div>
-  <div th:if="${roles.rolId} == 4">
-    <table border="1">
-      <thead>
-        <th>名前</th>
-        <th>役職</th>
-      </thead>
-      <tbody>
-        <span th:if="${divinedUser}">
-          <tr th:each="user,stat:${divinedUser}">
-            <td>[[${user.pname}]]</td>
-            <div th:if="${user.roles} == 1">
-              <td>人狼ではない</td>
-            </div>
-            <div th:if="${user.roles} == 2">
-              <td>人狼</td>
-            </div>
-          </tr>
-        </span>
-      </tbody>
-    </table>
+<body class="hiru" link="#FFFFFF" vlink="#700000">
+  <div class="jinrouText">
+    <h1>会議中</h1>
+    <div th:if="${suspicious}">疑わしい人は[[${suspicious.pname}]]です。</div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div th:if="${roles.rolId} == 4">
+        <table border="1">
+          <thead>
+            <th>名前</th>
+            <th>役職</th>
+          </thead>
+          <tbody>
+            <span th:if="${divinedUser}">
+              <tr th:each="user,stat:${divinedUser}">
+                <td>[[${user.pname}]]</td>
+                <div th:if="${user.roles} == 1">
+                  <td>人狼ではない</td>
+                </div>
+                <div th:if="${user.roles} == 2">
+                  <td>人狼</td>
+                </div>
+              </tr>
+            </span>
+          </tbody>
+        </table>
+      </div>
+      <div id="result"></div>
+    </div>
+
   </div>
-  <div id="result"></div>
 </body>
 
 </html>

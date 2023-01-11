@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body class="matchingbody" link="#FFFFFF" vlink="#FFB359">
+<body class="yuu" link="#FFFFFF" vlink="#FFB359">
   <div class="jinrouText">
     ルーム作成
     <form th:action="@{/jinrou/make}" method="post">
@@ -16,7 +16,7 @@
       <input type="submit" value="作成">
     </form>
     </br>
-      ルーム参加
+    ルーム参加
     <form th:action="@{/jinrou/join}" method="post">
       ルーム名<input type="text" name="roomName" />
       パスワード<input type="text" name="roomPass" />
@@ -24,4 +24,5 @@
     </form>
   </div>
 </body>
+
 </html>

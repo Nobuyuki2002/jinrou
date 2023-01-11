@@ -3,34 +3,24 @@
 
 <head>
   <title>チームおおうち|Jinrou</title>
-  <style type="text/css" media="screen, print">
-    @font-face {
-      font-family: "M PLUS Rounded 1c";
-      src: url("https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c");
-    }
-
-    html,
-    body {
-      font-family: "Amatic SC", cursive;
-      height: 100%;
-      background: linear-gradient(rgb(255, 173, 114), rgb(244, 105, 5) 60%, #000040);
-    }
-  </style>
+  <link rel="stylesheet" href="../css/style.css">
 
 </head>
 
-<body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#700000">
-  <div th:if="${death}">
-    <h1>投票の結果[[${death.pname}]]を処刑します。</h1>
-  </div>
-  <div th:unless="${death}">
-    <h1>投票数が引き分けたため、処刑を行いません。</h1>
-  </div>
-  <div style="text-align: center">
-    <img th:src="${ropeImg}" align="left">
-  </div>
-  <div th:if="${roomId}">
-    <sapn><a th:href="@{/jinrou/match(roomId=${roomId})}">次の日へ</a></sapn>
+<body class="yuu" link="#FFFFFF" vlink="#700000">
+  <div class="jinrouText">
+    <div th:if="${death}">
+      <h1>投票の結果[[${death.pname}]]を処刑します。</h1>
+    </div>
+    <div th:unless="${death}">
+      <h1>投票数が引き分けたため、処刑を行いません。</h1>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <img th:src="${ropeImg}">
+      <div th:if="${roomId}">
+        <sapn><a th:href="@{/jinrou/match(roomId=${roomId})}">次の日へ</a></sapn>
+      </div>
+    </div>
   </div>
 </body>
 

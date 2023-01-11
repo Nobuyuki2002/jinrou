@@ -9,24 +9,23 @@
 <body class="registbody" link="#FFFFFF" vlink="#FFB359">
   <div class="jinrouText">
     <h1>新規ユーザ登録</h1>
-  <div>
-    <form th:action="@{/regist}" method="post">
-      ユーザ名<input type="text" name="userName" />
-      パスワード<input type="text" name="userPasswd" />
-      <input type="submit" value="登録">
-    </form>
-  </div>
-  <div th:if="error1">
-    <span>[[${error1}]]</span>
-  </div>
-  <div th:if="error2">
-    <span>[[${error2}]]</span>
-  </div>
-  <div th:if="message">
-    <a href="/">[[${message}]]</a>
+    <div>
+      <form th:action="@{/regist}" method="post">
+        ユーザ名<input type="text" name="userName" />
+        パスワード<input type="text" name="userPasswd" />
+        <input type="submit" value="登録">
+      </form>
+    </div>
+    <div th:if="error1">
+      <span>[[${error1}]]</span>
+    </div>
+    <div th:if="error2">
+      <span>[[${error2}]]</span>
+    </div>
+    <div th:if="message">
+      <a href="/">[[${message}]]</a>
+    </div>
   </div>
 </body>
 
-  </div>
-  
 </html>
