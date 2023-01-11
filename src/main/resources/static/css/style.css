@@ -1,14 +1,14 @@
-.waitbody {
+.yoru {
   background-image: url("../image/flooryo.jpg");
   background-size: cover;
 }
 
-.createbody {
+.hiru {
   background-image: url("../image/floorhi.jpg");
   background-size: cover;
 }
 
-.matchingbody {
+.yuu {
   background-image: url("../image/flooryuu.jpg");
   background-size: cover;
 }
@@ -16,6 +16,21 @@
 .registbody {
   background-image: url("../image/background.jpg");
   background-size: cover;
+}
+
+.wolfWin {
+  background-image: url("../image/wolfWin.png");
+  background-size: cover;
+}
+
+.villagerWin {
+  background-image: url("../image/villagerWin.png");
+  background-size: cover;
+}
+
+.death {
+  background-image: url("../image/death.jpg");
+  background-color: rgb(36, 30, 32);
 }
 
 .jinrouText {

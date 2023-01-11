@@ -9,19 +9,23 @@
 
 <div th:if="${winner=='人狼陣営'}">
 
-  <body bgcolor="black" text="red">
-    <h1>終了</h1>
-    <div th:if="${winner}">[[${winner}]]の勝利</div>
-    <div><a href=" /logout">ログアウト</a></div>
+  <body class="wolfWin" text="red">
+    <div class="jinrouText">
+      <h1>終了</h1>
+      <div th:if="${winner}">[[${winner}]]の勝利</div>
+      <div><a href=" /logout">ログアウト</a></div>
+    </div>
   </body>
 </div>
 
 <div th:if="${winner=='村人陣営'}">
 
-  <body bgcolor="#000063" text="white" link="#FFFFFF" vlink="#FFB359">
-    <h1>終了</h1>
-    <div th:if="${winner}">[[${winner}]]の勝利</div>
-    <div><a href=" /logout">ログアウト</a></div>
+  <body class="villagerWin" text="white" link="#FFFFFF" vlink="#FFB359">
+    <div class="jinrouText">
+      <h1>終了</h1>
+      <div th:if="${winner}">[[${winner}]]の勝利</div>
+      <div><a href=" /logout">ログアウト</a></div>
+    </div>
   </body>
 </div>
 
