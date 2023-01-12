@@ -25,11 +25,11 @@
               result += "<div><ul>";
               result += "<div><a href =\" /jinrou/discuttion\">会議へ入室する</a></li>";
               result += "</ul></div>";
+              console.log(result);
+              var div = document.getElementById("result");
+              div.innerHTML = result;
             }
           });
-          console.log(result);
-          var div = document.getElementById("result");
-          div.innerHTML = result;
         }
       }, 1000);
     });
@@ -37,9 +37,8 @@
 </head>
 
 <body class="yoru" link="#FFFFFF" vlink="#FFB359">
-  <div class="jinrouText">
+  <div class="jinrouText" id="result">
     <h1>朝が来るのを待っています</h1>
-    <div id="result"></div>
   </div>
 </body>
 
