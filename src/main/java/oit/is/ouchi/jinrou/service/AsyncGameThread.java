@@ -46,35 +46,22 @@ public class AsyncGameThread {
           ArrayList<Users> aliveUsersInRoom = usersMapper.selectAliveUsers(i);
           // 人狼が2日目以降、誰かを殺害する
           for (Users alive : aliveUsersInRoom) {
-            if (alive.getRoles() == 2 && roomsMapper.selectById(i).getRoopCount() > 2) {
+            if (alive.getRoles() == 2 && (roomsMapper.selectById(i).getRoopCount() > 2
+                || roomsMapper.selectById(i).getRoopCount() * (-1) > 2)) {
               Users killed = usersMapper.selectById(alive.getJobVote());
               killed.setDeath(true);
               usersMapper.updateDeath(killed);
-              break;
             }
-            if (alive.getRoles() == 2 && roomsMapper.selectById(i).getRoopCount() * (-1) > 2) {
-              Users killed = usersMapper.selectById(alive.getJobVote());
-              killed.setDeath(true);
-              usersMapper.updateDeath(killed);
-              break;
-            }
-          }
-          // 占い師が初日以降、誰かを占う
-          for (Users alive : aliveUsersInRoom) {
-            if (alive.getRoles() == 4 && roomsMapper.selectById(i).getRoopCount() > 1) {
+
+            if (alive.getRoles() == 4) {
               Users divined = usersMapper.selectById(alive.getJobVote());
               divined.setDivined(true);
               usersMapper.updateDivineFlag(divined);
-              break;
-            }
-            if (alive.getRoles() == 4 && roomsMapper.selectById(i).getRoopCount() * (-1) > 1) {
-              Users divined = usersMapper.selectById(alive.getJobVote());
-              divined.setDivined(true);
-              usersMapper.updateDivineFlag(divined);
-              break;
             }
           }
+
           gameJudge(i);
+
           room = roomsMapper.selectById(i);
           rooms.add(room);
         }
@@ -150,14 +137,13 @@ public class AsyncGameThread {
     System.out.println("AsyncCheckKillVote complete");
   }
 
-  @Transactional
   public void gameJudge(int roomId) {
     Rooms room = roomsMapper.selectById(roomId);
     if (!room.isActive()) {
       return;
     }
     // ゲーム続行判定(村人が1人以下になれば人狼対村人が1:1)
-    if (usersMapper.selectCountByVillagerId(roomId, 2, false).getCount() <= 1) {
+    if (usersMapper.selectCountByOtherId(roomId, 2, false).getCount() <= 1) {
       room.setActive(false);
       room.setRoopCount(-1);
       room.setWolfNum(0);

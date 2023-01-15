@@ -69,7 +69,7 @@ public interface UsersMapper {
   Count selectCountByRoleId(int room, int roles, boolean isDeath);
 
   @Select("SELECT COUNT(*) as count FROM users WHERE room = #{room} and roles != #{roles} and isDeath = #{isDeath};")
-  Count selectCountByVillagerId(int room, int roles, boolean isDeath);
+  Count selectCountByOtherId(int room, int roles, boolean isDeath);
 
   @Delete("DELETE FROM users WHERE room = #{room};")
   void deleteUsersByRoom(int room);

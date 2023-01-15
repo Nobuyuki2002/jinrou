@@ -163,6 +163,7 @@ public class JinrouController {
     }
     user = usersMapper.selectByName(prin.getName());
     if (user.isDeath()) {
+      usersMapper.updateLnameByName(user);
       return "death.html";
     }
 
@@ -195,17 +196,13 @@ public class JinrouController {
   @GetMapping("job")
   public String job(@RequestParam Integer id, Principal prin, ModelMap model) {
     Users loginUser = usersMapper.selectByName(prin.getName());
-    Rooms room = roomsMapper.selectById(loginUser.getRoom());
+    // Rooms room = roomsMapper.selectById(loginUser.getRoom());
     loginUser.setJobVote(id);
     usersMapper.updateJobVote(loginUser);
     loginUser.setKillVote(-1);
     usersMapper.updateKillVote(loginUser);
     model.addAttribute("roomId", loginUser.getRoom());
     model.addAttribute("userId", loginUser.getId());
-    if (room.getRoopCount() < 0) {
-      room.setRoopCount(((-1) * room.getRoopCount()) + 1);
-      roomsMapper.updateRoopCount(room);
-    }
     return "discWait.html";
   }
 
@@ -230,6 +227,11 @@ public class JinrouController {
     if (loginUser.isDeath()) {
       usersMapper.updateLnameByName(loginUser);
       return "death.html";
+    }
+
+    if (room.getRoopCount() < 0) {
+      room.setRoopCount(((-1) * room.getRoopCount()) + 1);
+      roomsMapper.updateRoopCount(room);
     }
 
     ArrayList<Users> users = usersMapper.selectAliveUsers(room.getRoomId());
